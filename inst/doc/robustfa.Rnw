@@ -1,0 +1,839 @@
+% -*- TeX -*- -*- Soft -*-
+\documentclass[article,shortnames,nojss]{jss}
+%\VignetteIndexEntry{An Object-Oriented Framework for Robust Factor Analysis}
+%\VignetteDepends{robustfa,rrcov,robustbase,pcaPP,mvtnorm,lattice,grid}
+%\VignetteKeywords{robustness, factor analysis, object-oriented framework, R, statistical design patterns}
+%\VignettePackage{robustfa}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% almost as usual
+\author{Ying-Ying Zhang\\Chongqing University}
+\title{An Object-Oriented Framework for \\
+Robust Factor Analysis
+\thanks{The research was supported by Natural Science Foundation Project of CQ
+CSTC CSTC2011BB0058.}}
+
+
+%% for pretty printing and a nice hypersummary also set:
+\Plainauthor{Ying-Ying Zhang} %% comma-separated
+\Plaintitle{An Object-Oriented Framework for Robust Factor Analysis} %% without formatting
+\Shorttitle{An OOF for Robust Factor Analysis} %% a short title (if necessary)
+
+%% an abstract and keywords
+\Abstract{ Taking advantage of the \proglang{S4} class system of the
+programming environment \proglang{R}, which facilitates the creation and
+maintenance of reusable and modular components, an object-oriented
+framework for robust factor analysis was developed. The framework
+resides in the packages \pkg{robustfa} and \pkg{rrcov}. The
+design of the framework follows common statistical design patterns.
+The application of the framework to multivariate data analysis is
+demonstrated on a stocks example which itself is part of the package
+\pkg{robustfa}.
+}
+\Keywords{robustness, factor analysis,
+object-oriented framework, \proglang{R}, statistical design patterns}
+\Plainkeywords{robustness, factor analysis,
+object-oriented framework, R, statistical design patterns} %% without formatting
+%% at least one keyword must be supplied
+
+%% publication information
+%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
+%% \Volume{13}
+%% \Issue{9}
+%% \Month{September}
+%% \Year{2004}
+%% \Submitdate{2004-09-29}
+%% \Acceptdate{2004-09-29}
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+  Ying-Ying Zhang\\
+  Department of Statistics and Actuarial Science\\
+  College of Mathematics and Statistics\\
+  Chongqing University\\
+  Chongqing, China\\
+  E-mail: \email{robertzhang@cqu.edu.cn}\\
+  URL: \url{http://baike.baidu.com/view/7694173.htm}
+}
+%% It is also possible to add a telephone and fax number
+%% before the e-mail in the following format:
+%% Telephone: +43/1/31336-5053
+%% Fax: +43/1/31336-734
+
+%% for those who use Sweave please include the following line (with % symbols):
+%% need no \usepackage{Sweave.sty}
+
+%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Sweave options for the complete document
+%% \SweaveOpts{prefix.string=robustfa}
+\SweaveOpts{prefix.string=robustfa}
+\begin{document}
+
+%% include your article here, just as usual
+%% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
+%% Note: If there is markup in \(sub)section, then it has to be escape as above.
+
+\section{Introduction}
+
+Outliers exist in virtually every data set in any application
+domain. In order to avoid the masking effect, robust estimators are
+needed. The classical estimators of multivariate location and
+scatter are the sample mean $\mathbf{\bar{x}}$ and the sample
+covariance matrix $\mathbf{S}$. These estimates are optimal if the
+data come from a multivariate normal distribution but are extremely
+sensitive to the presence of even a few outliers. If outliers are
+present in the input data they will influence the estimates
+$\mathbf{\bar{x}}$\ and $\mathbf{S}$ and subsequently worsen the
+performance of the classical factor analysis \citep{Pison-etal:03}.
+Therefore it is important to consider robust alternatives to these
+estimators. There are several robust estimators in the literature:
+MCD \citep{Rousseeuw:85, Rousseeuw-VanDriessen:99}, OGK
+\citep{Maronna-Zamar:02}, MVE \citep{Rousseeuw:85}, M
+\citep{Rocke:96}, S \citep{Davies:87, Ruppert:92, Woodruff-Rocke:94, Rocke:96,
+SalibianBarrera-Yohai:06} and Stahel-Donoho
+\citep{Stahel:81a, Stahel:81b, Donoho:82, Maronna-Yohai:95}.
+Substituting the classical location and scatter estimates by their
+robust analogues is the most straightforward method for robustifying
+many multivariate procedures \citep{Maronna-Martin-Yohai:06,
+Todorov-Filzmoser:09}, which is our choice for robustifying the
+factor analysis procedure.
+
+Taking advantage of the new \proglang{S4} class system \citep{Chambers:98} of \proglang{R}
+\citep{RDevelopmentCoreTeam:11} which facilitate the creation of
+reusable and modular components an object-oriented framework for
+robust factor analysis was implemented. The goal of the framework is
+manyfold \citep{Todorov-Filzmoser:09}:
+
+\begin{enumerate}
+\item to provide the end-user with a flexible and easy access to newly
+developed robust factor analysis methods for multivariate data analysis;
+
+\item to allow the programming statisticians an extension by developing,
+implementing and testing new methods with minimum effort, and
+
+\item to guarantee the original developers and maintainer of the packages a
+high level of maintainability.
+\end{enumerate}
+
+The application of the framework to multivariate data analysis is
+demonstrated on a stocks example which itself is part of the package
+\pkg{robustfa}. We follow the object-oriented paradigm as applied
+to the \proglang{R} object model (naming conventions, access methods,
+coexistence of \proglang{S3} and \proglang{S4} classes, usage of UML, etc.) as described
+in \cite{Todorov-Filzmoser:09}. The framework is implemented in the
+\proglang{R} package \pkg{robustfa} which is available by sending an email
+to the author.
+
+The rest of the paper is organized as follows. In the next Section 2 the
+design approach and structure of the framework are given. Section 3 describes
+the robust factor analysis method, its computation and implementation. The
+Sections 3.1, 3.2, and 3.3 are dedicated to the object model, method of robust
+factor analysis, and a stocks example, respectively. Section 4 concludes.
+
+\section{Design approach and structure of the framework}
+
+We follow the route of \cite{Todorov-Filzmoser:09}. The main part of
+the framework is implemented in the package \pkg{robustfa} but it
+relies on codes in the packages \pkg{rrcov} \citep{Todorov:09},
+\pkg{robustbase} \citep{Rousseeuw-etal:09}, and \pkg{pcaPP}
+\citep{Filzmoser-Fritz-Kalcher:09}. The structure of the framework
+and its relation to other \proglang{R} packages are shown in Figure~\ref{fig:structure}.
+Like \pkg{robust} \citep{Wang-etal:08},
+\pkg{robustfa} extends \pkg{rrcov} with options for dealing
+with robust factor analysis problems.
+
+\begin{figure}[!htbp]
+\centerline{
+\includegraphics[width=3in]{Structure}}\caption{Class diagram: structure of
+the framework and relation to other \proglang{R} packages.}%
+\label{fig:structure}%
+\end{figure}
+
+\section{Robust factor analysis}
+
+The following example in Figure~\ref{fig:fa-ex-hbk} illustrates the effect of
+outliers on the classical factor analysis. We use the Hawkins, Bradu and Kass
+data set \code{hbk} from the package \pkg{robustbase} consists of 75
+observations in 4 dimensions (one response and three explanatory variables).
+The first 10 observations are bad leverage points, and the next four points
+are good leverage points (i.e., their \textbf{x} are outlying, but the
+corresponding \code{y} fit the model quite well). We will consider only the
+X-part of the data. The left panel shows the plot of the scores on the first
+two classical factors (the first two factors account for 99.4\% of the total
+variation). The outliers are identified as separate groups, but the regular
+points are far from the origin (where the mean of the scores should be
+located). Furthermore, the 97.5\% tolerance ellipse does not cover the regular
+points, which shows that the tolerance ellipse is highly influenced by the
+outliers. The right panel shows the same plot based on robust estimates. We
+see that the estimate of the center is not shifted by the outliers and these
+outliers are clearly separated by the 97.5\% tolerance ellipse.
+
+<<echo=FALSE, results=hide>>=
+## set the prompt to "R> " and the continuation to "+ "
+options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
+@
+
+<<label=intro>>=
+##
+## Load the 'robustfa' package and two data sets
+##
+library("robustfa")
+data("hbk")
+hbk.x <- hbk[,1:3]              # take only the X part
+
+data("stock611")
+stock608 = stock611[-c(92,2,337),]
+stock604 = stock611[-c(92,2,337,338,379,539,79),]
+R611 = cor(stock611[,3:12])
+@
+
+<<label=FaClassic-factorScore, echo=FALSE, results=hide>>=
+faClassic = FaClassic(x = hbk.x, factors = 2, method = "pca",
+scoresMethod = "regression"); faClassic
+summary(faClassic)
+plot(faClassic, which = "factorScore", choices = 1:2)
+
+<<label=FaCov-factorScore, echo=FALSE, results=hide>>=
+faCov = FaCov(x = hbk.x, factors = 2, method = "pca",
+scoresMethod = "regression", cov.control = CovControlMcd()); faCov
+summary(faCov)
+plot(faCov, which = "factorScore", choices = 1:2)
+
+<<label=fa-ex-hbk, echo=FALSE, results=hide, fig=TRUE, include=FALSE>>=
+##
+## Plot of the first two factors of hbk: classical and robust.
+##
+usr <- par(mfrow = c(1,2))
+cfaClassic <- list(center = c(0,0), cov = diag(faClassic@eigenvalues[1:2]), n.obs = faClassic@n.obs)
+rrcov:::.myellipse(faClassic@scores, xcov = cfaClassic, main = "Classical",  xlab = "Factor1", ylab = "Factor2", id.n = 0)
+abline(v = 0)
+abline(h = 0)
+text(30,-20,labels = "1-13", cex = 0.8)
+text(60,-33,labels = "14", cex = 0.8)
+
+cfaCov <- list(center = c(0,0), cov = diag(faCov@eigenvalues[1:2]), n.obs = faCov@n.obs)
+rrcov:::.myellipse(faCov@scores, xcov = cfaCov, main = "Robust (MCD)",
+xlab = "Factor1", ylab = "Factor2", xlim = c(-10,45), ylim = c(-5,20), id.n = 4)
+# xlim = c(-10,45), ylim = c(-25,15),
+text(30,10,labels = "1-10", cex = 0.8)
+abline(v = 0)
+abline(h = 0)
+par(usr)
+
+colMeans(faClassic@scores)
+colMeans(faCov@scores)
+colMeans(faClassic@scores[15:75,])
+colMeans(faCov@scores[15:75,])
+@
+
+\begin{figure}[!htbp]
+\centerline{
+\includegraphics[width=4in]{robustfa-fa-ex-hbk}}
+\caption{Plot of the first two factors
+of \code{hbk}: classical and robust.}%
+\label{fig:fa-ex-hbk}%
+\end{figure}
+
+\subsection{Object model}
+
+The object model for the \proglang{S4} classes and methods implementing the
+robust factor analysis follows the Unified Modeling Language (UML)
+\citep{OMG:09a, OMG:09b} class diagram and is presented in Figure~\ref{fig:FaModel}.
+A class is denoted by a box with three
+compartments which contain the name, the attributes (slots) and
+operations (methods) of the class, respectively. The class names,
+\code{Fa} and \code{FaRobust}, in italics indicate that the
+classes are abstract. Each attribute is followed by its type and
+each operation--by the type of its return value. We use the \proglang{R} types
+like \code{numeric}, \code{vector}, \code{matrix}, etc. but
+the type can be also a name of an \proglang{S4} class (\code{Fa},
+\code{FaClassic}, or \code{FaCov}). The classes
+\code{Ulogical}, \code{Unumeric} etc. are class unions for
+optional slots, e.g., for definition of slots which will be computed
+on demand. Relationships between classes are denoted by arrows with
+different form. The inheritance relationship is depicted by a large
+empty triangular arrowhead pointing to the base class. We see that
+both \code{FaClassic} and \code{FaRobust} inherit from
+\code{Fa}, and \code{FaCov} inherits from \code{FaRobust}.
+Composition means that one class contains another one as a slot.
+This relation is represented by an arrow with a solid diamond on the
+side of the composed class. We see that \code{SummaryFa} is a
+composed class of \code{Fa}.
+
+As in \cite{Todorov-Filzmoser:09}, all UML diagrams of the framework
+were created with the open source UML tool \textbf{ArgoUML}
+\citep{Robbins:99, Robbins-Redmiles:00} which is available for
+download from \url{http://argouml.tigris.org/}. The naming conventions of
+the framework follow the recommended Sun's \proglang{Java} coding
+style. See \url{http://java.sun.com/docs/codeconv/}.
+
+\begin{figure}[!htbp]
+\centerline{
+\includegraphics[width=3.7in]{FaModel}}\caption{Object model for robust factor
+analysis.}%
+\label{fig:FaModel}%
+\end{figure}
+
+\subsection{FA based on a robust covariance matrix (MCD, OGK, MVE, etc.)}
+
+As in \cite{Todorov-Filzmoser:09},\ the most straightforward and
+intuitive method to obtain robust factor analysis is to replace the
+classical estimates of location and covariance by their robust
+analogues. The package \pkg{stats} in base \proglang{R} contains the
+function \code{factanal()} which performs a factor analysis on a
+given numeric data matrix and returns the results as an object of \proglang{S3}
+class \code{factanal}. This function has an argument
+\code{covmat} which can take a covariance matrix, or a covariance
+list as returned by \code{cov.wt}, and if supplied, it is used
+rather than the covariance matrix of the input data. This allows to
+obtain robust factor analysis by supplying the covariance matrix
+computed by \code{cov.mve} or \code{cov.mcd} from the package
+\pkg{MASS}. The reason to include such type of function in the
+framework is the unification of the interfaces by leveraging the
+object orientation provided by the \proglang{S4} classes and methods. The
+function \code{FaCov()} computes robust factor analysis by
+replacing the classical covariance matrix with one of the robust
+covariance estimators available in the framework---MCD, OGK, MVE, M,
+S or Stahel-Donoho, i.e., the parameter \code{cov.control} can be
+any object of a class derived from the base class
+\code{CovControl}. This control class will be used to compute a
+robust estimate of the covariance matrix. If this parameter is
+omitted, MCD will be used by default. Of course any newly developed
+estimator following the concepts of the framework can be used as
+input to the function \code{FaCov()}.
+
+\subsection{Example: Stocks data}
+
+In this Section, a data set \code{stock611} is used to show the
+base functionalities of the robust factor analysis framework. This
+data set consists of 611 observations with 12 variables. The data
+set is from Chinese stock market in the year 2001. It is used in
+\cite{Wang:09} to illustrate factor analysis methods.
+
+Robust factor analysis is represented by the class \code{FaCov} which
+inherits from class \code{Fa} by class \code{FaRobust} of distance 2,\ and
+uses all slots and methods defined from \code{Fa}. The function
+\code{FaCov()} serves as a constructor (generating function) of the class.
+It can be called either by providing a data frame or matrix or a formula with
+no response variable, referring only to numeric variables. The usage of the
+default method of \code{FaCov} is:
+\begin{Code}
+FaCov(x, factors = 2, cov.control = CovControlMcd(),
+method = c("mle", "pca", "pfa"),
+scoresMethod = c("none", "regression", "Bartlett"), ...)
+\end{Code}
+
+\noindent where \code{x} is a numeric matrix or an object that can
+be coerced to a numeric matrix. \code{factors} is the number of
+factors to be fitted. \code{cov.control} specifies which
+covariance estimator to use by providing a \code{CovControl-class}
+object. The default is \code{CovControlMcd-class} which will
+indirectly call \code{CovMcd}. If \code{cov.control = NULL} is
+specified, the classical estimates will be used by calling
+\code{CovClassic}. \code{method} is the method of factor
+analysis, one of \code{"mle"} (the default), \code{"pca"}, and
+\code{"pfa"}. \code{scoresMethod} specifies which type of scores
+to produce. The default is \code{"none"}, \code{"regression"}
+gives Thompson's scores, and \code{"Bartlett"} gives Bartlett's
+weighted least-squares scores \citep{Xue-Chen:07}. The usage
+of the formula interface of \code{FaCov} is:
+\begin{Code}
+FaCov(formula, data = NULL, factors = 2, method = "mle",
+scoresMethod = "none", ...)
+\end{Code}
+
+\noindent where \code{formula} is a formula with no response variable,
+referring only to numeric variables. \code{data} is an optional data frame
+containing the variables in the \code{formula}. Classical factor analysis is
+represented by the class \code{FaClassic} which inherits directly from
+\code{Fa},\ and uses all slots and methods defined there. The function
+\code{FaClassic()} serves as a constructor (generating function) of the
+class. It also has its default method and formula interface as
+\code{FaCov()}.
+
+The code line
+<<label=show-print-summary_Fa>>=
+##
+## facovRegOgk is obtained from FaCov.default,
+##               uses the default method = "mle"
+##
+facovRegOgk = FaCov(x = scale(stock611[,3:12]), factors = 3,
+cov.control = CovControlOgk(), scoresMethod = "regression")
+@
+
+%% Input (echo) FALSE, Output (results) FALSE
+<<label=show-print-summary_Fa, echo=FALSE, results=hide>>=
+facovRegOgk
+summary(facovRegOgk)
+@
+
+\noindent generates an object \code{facovRegOgk}\ of class \code{FaCov},
+where \code{x} is a scaled (standardized) numeric matrix. In fact, it is
+equivalent to use the formula interface
+<<label=show-print-summary_Fa>>=
+## In fact, it is equivalent to use FaCov.formula
+## facovForRegOgkMle = facovRegOgk
+facovForRegOgkMle = FaCov(~., data = as.data.frame(scale(stock611[,3:12])),
+factors = 3, cov.control = CovControlOgk(), method = "mle",
+scoresMethod = "regression")
+@
+
+%% Input (echo) FALSE, Output (results) FALSE
+<<label=show-print-summary_Fa, echo=FALSE, results=hide>>=
+facovForRegOgkMle
+summary(facovForRegOgkMle)
+@
+
+\noindent That is \code{facovRegOgk = facovForRegOgkMle}. Type
+%% Input (echo) TRUE, Output (results) TRUE
+<<label=show-print-summary_Fa>>=
+## obj = show(obj) = print(obj) = myFaPrint(obj)
+class(facovRegOgk)
+@
+
+\noindent We see that the class \code{FaCov} is defined in the package
+\pkg{robustfa}. For an object \code{obj} of class \code{Fa}, we have
+\code{obj = show(obj) = print(obj) = myFaPrint(obj)}. Here \code{show()
+}and\code{ print() }are \proglang{S4} generic functions, while \code{myFaPrint()} is
+an \proglang{S3} function acting as a function definition for \code{setMethod} of the
+generic functions \code{show }and\code{ print}.
+%% Input (echo) TRUE, Output (results) TRUE
+<<label=show-print-summary_Fa>>=
+show(facovRegOgk)
+@
+
+%% Input (echo) FALSE, Output (results) FALSE
+<<label=show-print-summary_Fa, echo=FALSE, results=hide>>=
+facovRegOgk
+print(facovRegOgk)
+myFaPrint(facovRegOgk)
+@
+
+From Figure~\ref{fig:FaModel} we see that \code{summary()} generates an
+object of class \code{SummaryFa} which has its own \code{show()} method.
+%% Input (echo) TRUE, Output (results) TRUE
+<<label=show-print-summary_Fa>>=
+summaryFacovRegOgk = summary(facovRegOgk); summaryFacovRegOgk
+@
+
+%% Input (echo) FALSE, Output (results) FALSE
+<<label=show-print-summary_Fa, echo=FALSE, results=hide>>=
+show(summaryFacovRegOgk)
+class(summaryFacovRegOgk)
+@
+
+Next we calculate prediction/scores using \code{predict()}. The usage is
+\code{predict(object, ...)}, where \code{object}\ is an object of class
+\code{Fa}. If missing \code{...}(\code{newdata}), the \code{scores}
+slot of \code{object} is used. To save space, only the first five and last
+five rows of the scores are displayed.
+%% Input (echo) TRUE, Output (results) FALSE
+<<label=predict_Fa, results=hide>>=
+## If missing newdata, the scores are used
+predict(facovRegOgk)
+@
+%% Input (echo) FALSE, Output (results) TRUE
+<<label=predict_Fa, echo=FALSE>>=
+predict(facovRegOgk)[c(1:5, 607:611),]
+@
+
+\noindent If not missing \code{...}, then \code{...} must have the name
+\code{newdata}. Moreover, \code{newdata} should have the same
+\code{center} and \code{scale} attributes as the original data. For
+example, the original data is \code{x = scale(stock611[,3:12])}, and
+\code{newdata} is a one row \code{data.frame}.
+%% Input (echo) TRUE, Output (results) TRUE
+<<label=predict_Fa>>=
+## If not missing newdata, newdata must have the same center and
+## scale attributes as the original data.
+newdata = stock611[1,3:12]
+x = scale(stock611[,3:12])
+newdata = scale(newdata, center = attr(x,"scaled:center"),
+                          scale = attr(x,"scaled:scale"))
+@
+
+\noindent Then, to compute the prediction, \code{newdata} should be scaled
+using the robust center of the previously computed \code{Fa} object. This is
+actually done in ``\code{FaCov.default}" when computing the scores:
+\begin{Code}
+scores <- computeScores(out,
+newdata = scale(data, center = covmat$center, scale = F),
+scoresMethod = scoresMethod)
+\end{Code}
+
+\noindent Finally we get
+%% Input (echo) TRUE, Output (results) TRUE
+<<label=predict_Fa>>=
+## To compute prediction, newdata should be scaled using the robust center,
+## this is done in "FaCov.default" when computing the scores:
+## scores <- computeScores(out,
+##           newdata = scale(data, center = covmat$center, scale = F),
+##           scoresMethod = scoresMethod)
+## Now, prediction = predict(facovRegOgk)[1,] = facovRegOgk@scores[1,]
+newdata = scale(newdata, center = facovRegOgk@center, scale = F)
+prediction = predict(facovRegOgk, newdata = newdata)
+prediction
+@
+
+\noindent One can easily check that
+\begin{Code}
+prediction = predict(facovRegOgk)[1,] = facovRegOgk@scores[1,]
+\end{Code}
+
+To visualize the factor analysis results, the \code{plot} method can be
+used. We have \code{setMethod} \code{plot} with signature \code{x = "Fa",
+y = "missing"}. The usage is
+\begin{Code}
+plot(x, which = c("factorScore", "screeplot"), choices = 1:2)
+\end{Code}
+
+\noindent Where \code{x} is an object of class \code{Fa}.\ The argument
+\code{which} indicates what kind of plot. If \code{which = "factorScore"},
+then a scatterplot of the factor scores is produced; if \code{which =
+"screeplot"}, then the eigenvalues plot is created which is helpful to select
+the number of factors. The argument \code{choices} is an integer vector of
+length two indicating which columns of the factor scores to plot. To see how
+\code{plot} is functioning, we first generate the \code{Fa} objects. The
+following code lines use the default \code{method = "mle"}, and result in errors:
+\begin{Code}
+R> faclassicReg611 = FaClassic(x = scale(stock611[,3:12]), factors = 3,
++       scoresMethod = "regression"); faclassicReg611
+\end{Code}
+\begin{Code}
+Error in factanal(factors = factors, covmat = covmat) :
+  unable to optimize from these starting value(s)
+\end{Code}
+
+\noindent So we change to use \code{method = "pca"}, and it works.
+%% Input (echo) TRUE, Output (results) TRUE
+<<label=plot-Fa-FaClassic-FaCov>>=
+## method = "mle" error
+##  faclassicReg611 = FaClassic(x = scale(stock611[,3:12]), factors = 3,
+##        scoresMethod = "regression"); faclassicReg611
+## Error in factanal(factors = factors, covmat = covmat) :
+##   unable to optimize from these starting value(s)
+
+## method = "pca" OK
+## x = scale(stock611[,3:12])
+
+## FaClassic
+faclassicRegPca611 = FaClassic(x = scale(stock611[,3:12]), factors = 2,
+method = "pca", scoresMethod = "regression"); faclassicRegPca611
+summary(faclassicRegPca611)
+@
+
+\noindent\code{faclassicRegPca611} is an object of class \code{FaClassic}.
+From the \code{show} result of \code{faclassicRegPca611}, we see that
+its \code{Factor1} explains variables \code{x1-x4}, \code{x9},
+\code{x10}; its \code{Factor2} explains variables \code{x5-x8} (with
+loadings larger than 0.48). From the \code{summary} result of
+\code{faclassicRegPca611}, we see that the first two factors accout for
+about 81.1\% of its total variance. Next we generate an object
+\code{facovRegOgkPca} of class \code{FaCov} using the same data set.
+%% Input (echo) TRUE, Output (results) TRUE
+<<label=plot-Fa-FaClassic-FaCov>>=
+## FaCov
+facovRegOgkPca = FaCov(x = scale(stock611[,3:12]), factors = 2, method = "pca",
+cov.control = CovControlOgk(), scoresMethod = "regression"); facovRegOgkPca
+summary(facovRegOgkPca)
+@
+
+\noindent From the \code{show} result of \code{facovRegOgkPca}, we see
+that its \code{Factor1} explains variables \code{x3-x8} (with loadings
+larger than 0.43); its \code{Factor2} explains variables \code{x1-x4},
+\code{x9}, \code{x10}. Thus \code{Factor1 }(\code{Factor2}) of
+\code{faclassicRegPca611} and \code{Factor2 }(\code{Factor1}) of
+\code{facovRegOgkPca} are similar. From the \code{summary} result of
+\code{facovRegOgkPca}, we see that the first two factors accout for about
+75.6\% of its total variance.
+
+The following code lines generate classical and robust scatterplot of the
+first two factor scores. See Figure~\ref{fig:FS_reg_c_ogk}.
+%% Input (echo) TRUE, Output (results) FALSE
+<<label=plot-Fa-FS_reg_c_ogk, echo=TRUE, results=hide, fig=TRUE, include=FALSE>>=
+usr <- par(mfrow=c(1,2))
+plot(faclassicRegPca611, which = "factorScore", choices = 2:1)
+plot(facovRegOgkPca, which = "factorScore", choices = 1:2)
+par(usr)
+@
+
+
+\begin{figure}[!htbp]
+\centerline{
+\includegraphics[width=4in]{robustfa-plot-Fa-FS_reg_c_ogk}
+}
+\caption{Classical and robust scatterplot of the first two
+factor scores of the stocks data.}%
+\label{fig:FS_reg_c_ogk}%
+\end{figure}
+
+\noindent The following code lines generate classical and robust scree plot. See Figure~\ref{fig:scree_reg_c_ogk}.
+%% Input (echo) TRUE, Output (results) FALSE
+<<label=plot-Fa-scree_reg_c_ogk, echo=TRUE, results=hide, fig=TRUE, include=FALSE>>=
+usr <- par(mfrow=c(1,2))
+plot(faclassicRegPca611, which = "screeplot")
+plot(facovRegOgkPca, which = "screeplot")
+par(usr)
+@
+
+\begin{figure}[!htbp]
+\centerline{
+\includegraphics[width=4in]{robustfa-plot-Fa-scree_reg_c_ogk}
+}
+\caption{Classical and robust scree plot of the stocks data.}%
+\label{fig:scree_reg_c_ogk}%
+\end{figure}
+
+\noindent Next we impose a 97.5\% tolerance ellipse on the scatterplot of the
+first two factors of the stocks data by using a function
+\code{rrcov:::.myellipse}. See Figure~\ref{fig:FS_ellipse_reg_c_ogk}.
+
+%% Input (echo) FALSE, Output (results) FALSE
+<<label=plot-Fa-FS_ellipse_reg_c_ogk, echo=FALSE, results=hide, fig=TRUE, include=FALSE>>=
+## Plot of the first two factors of stock611 and 97.5% tolerance ellipse plot:
+## classical and robust.
+cfaclassicRegPca611 <- list(center = c(0,0), cov = diag(faclassicRegPca611@eigenvalues[1:2]), n.obs = faclassicRegPca611@n.obs)
+cfacovRegOgkPca <- list(center = c(0,0), cov = diag(facovRegOgkPca@eigenvalues[1:2]), n.obs = facovRegOgkPca@n.obs)
+
+usr <- par(mfrow=c(1,2))
+rrcov:::.myellipse(faclassicRegPca611@scores[,2:1], xcov = cfaclassicRegPca611,
+main = "Classical, method = \"pca\"", xlab = "Factor2", ylab = "Factor1", id.n = 0, xlim = c(-6,6), ylim = c(-5,30))
+abline(v = 0)
+abline(h = 0)
+rrcov:::.myellipse(facovRegOgkPca@scores[,1:2], xcov = cfacovRegOgkPca,
+main = "Robust (OGK), method = \"pca\"", xlab = "Factor1", ylab = "Factor2", id.n = 0, xlim = c(-6,6), ylim = c(-5,30))
+# xlim = c(-6,6), ylim = c(-5,30)
+# text(30,10,labels = "1-10", cex = 0.8)
+abline(v = 0)
+abline(h = 0)
+par(usr)
+@
+
+\begin{figure}[!htbp]
+\centerline{
+\includegraphics[width=4in]{robustfa-plot-Fa-FS_ellipse_reg_c_ogk}
+}
+\caption{Classical and robust scatterplot of the first two
+factor scores of the stocks data with a 97.5\% tolerance ellipse.}%
+\label{fig:FS_ellipse_reg_c_ogk}%
+\end{figure}
+
+We see that the two scatterplots are similar. However, the robust
+97.5\% tolerance ellipse is tighter than that of classical. By inspecting the
+classical and robust ordered scores, we find that they are quite different. In
+the following, \code{orderedFsC[[1]]} and \code{orderedFsOgk[[1]]} are
+decreasing on their first column; \code{orderedFsC[[2]]} and
+\code{orderedFsOgk[[2]]} are decreasing on their second column.
+To save space, only the first 10 rows of the scores are displayed.
+%% Input (echo) FALSE, Output (results) FALSE
+<<label=plot-Fa-colMeans-orderedFs, echo=FALSE, results=hide>>=
+##
+## the colMeans of all observations of FaClassic-class equals 0
+## the colMeans of good observations (excluding the outliers) of FaCov-class equals 0
+colMeans(faclassicRegPca611@scores)
+colMeans(facovRegOgkPca@scores)
+
+## Display scores and ordered scores.
+faclassicRegPca611@scores[,2:1]
+facovRegOgkPca@scores[,1:2]
+@
+%% Input (echo) TRUE, Output (results) FALSE
+<<label=plot-Fa-colMeans-orderedFs, results=hide>>=
+orderedFsC = fsOrder(faclassicRegPca611@scores[,2:1]); orderedFsC
+@
+%% Input (echo) FALSE, Output (results) TRUE
+<<label=plot-Fa-colMeans-orderedFs, echo=FALSE>>=
+Lst=list(orderedFsC[[1]][1:10,], orderedFsC[[2]][1:10,]); Lst
+@
+%% Input (echo) TRUE, Output (results) FALSE
+<<label=plot-Fa-colMeans-orderedFs, results=hide>>=
+orderedFsOgk = fsOrder(facovRegOgkPca@scores[,1:2]); orderedFsOgk
+@
+%% Input (echo) FALSE, Output (results) TRUE
+<<label=plot-Fa-colMeans-orderedFs, echo=FALSE>>=
+Lst=list(orderedFsOgk[[1]][1:10,], orderedFsOgk[[2]][1:10,]); Lst
+@
+
+Next we utilize the \code{plot-methods} defined in the package
+\code{rrcov} which can plot a \code{Cov-class}.
+%% Input (echo) TRUE, Output (results) FALSE
+<<label=plot_Cov-compute, results=hide>>=
+##
+## all the following plots are OK for x = covOgk
+## myplotDD shows id.n and ind
+##
+covOgk = CovRobust(x = scale(stock611[,3:12]), control = "ogk"); covOgk
+covOgk68 = CovRobust(x = scale(stock611[,c(8,10)]), control = "ogk")
+@
+
+%% Input (echo) TRUE, Output (results) FALSE
+<<label=plot_Cov-cov_ogk_dd, echo=TRUE, results=hide, fig=TRUE, include=FALSE>>=
+plot(x = covOgk, which = "dd")
+@
+
+%% Input (echo) TRUE, Output (results) FALSE
+<<label=plot_Cov-cov_ogk_dd_my, echo=TRUE, results=hide, fig=TRUE, include=FALSE>>=
+result = myplotDD(x = covOgk)
+@
+
+%% Input (echo) TRUE, Output (results) FALSE
+<<label=plot_Cov-cov_ogk_distance_classical, echo=TRUE, results=hide, fig=TRUE, include=FALSE>>=
+plot(x = covOgk, which = "distance", classic = T)
+@
+
+%% Input (echo) TRUE, Output (results) FALSE
+<<label=plot_Cov-cov_ogk_qqchi2_classical, echo=TRUE, results=hide, fig=TRUE, include=FALSE>>=
+plot(x = covOgk, which = "qqchi2", classic = T)
+@
+
+%% Input (echo) TRUE, Output (results) FALSE
+<<label=plot_Cov-cov_ogk_tolEllipsePlot_classical_6_8, echo=TRUE, results=hide, fig=TRUE, include=FALSE>>=
+plot(x = covOgk68, which = "tolEllipsePlot", classic = T)
+@
+%% Input (echo) FALSE, Output (results) FALSE
+<<label=plot_Cov-cov_ogk_tolEllipsePlot_classical_6_8, echo=FALSE, results=hide>>=
+## plot(x = covOgk, which = "tolEllipsePlot", classic = T)
+## Warning message:
+## In .local(x, y, ...) :
+##   Warning: For tolerance ellipses the dimension must be 2!
+@
+
+%% Input (echo) TRUE, Output (results) FALSE
+<<label=plot_Cov-cov_ogk_screeplot_classical, echo=TRUE, results=hide, fig=TRUE, include=FALSE>>=
+plot(x = covOgk, which = "screeplot", classic = T)
+@
+
+%% Input (echo) FALSE, Output (results) FALSE
+<<label=plot_Cov-CovClassic, echo=FALSE, results=hide>>=
+##
+## can not plot "tolEllipsePlot"?
+## For tolerance ellipses the dimension must be 2!
+##
+## covC = CovClassic(x = scale(stock611[,3:12])); covC # covC = R611
+## plot(x = covC, which = "all")
+
+## Tolerance ellipses plot for variables x6 and x8.
+## It is the same with
+## plot(x = covOgk68, which = "tolEllipsePlot", classic = T)
+covC68Scale = CovClassic(x = scale(stock611[,c(8,10)]))
+plot(x = covC68Scale, which = "tolEllipsePlot")
+@
+
+\begin{figure}[!htbp]
+%Requires \usepackage{graphicx}
+\centerline{
+\begin{tabular}{c@{\hspace{1pc}}c}
+\includegraphics[width=2.5in]{robustfa-plot_Cov-cov_ogk_dd}& \includegraphics[width=2.5in]{robustfa-plot_Cov-cov_ogk_dd_my}\\
+\includegraphics[width=2.5in]{robustfa-plot_Cov-cov_ogk_distance_classical}& \includegraphics[width=2.5in]{robustfa-plot_Cov-cov_ogk_qqchi2_classical}\\
+\includegraphics[width=2.5in]{robustfa-plot_Cov-cov_ogk_screeplot_classical}& \includegraphics[width=2.5in]{robustfa-plot_Cov-cov_ogk_tolEllipsePlot_classical_6_8}
+\end{tabular} } \caption{Mahalanobis distances based on robust and classical
+estimates of the location and the covariance matrix in different plots.}%
+\label{fig:Md_c_ogk}%
+\end{figure}
+
+\noindent See Figure~\ref{fig:Md_c_ogk}. The two plots in the first row show
+distance-distance plots. We see that the robust (mahalanobis) distances are
+far larger than the (classical) mahalanobis distances. The outliers have large
+robust distances. The right plot is generated by \code{myplotDD(x = covOgk)}.
+\code{myplotDD} is a revised version of \code{.myddplot} in
+\code{plot-utils.R} in the package \code{rrcov}. In \code{myplotDD},
+\code{id.n} and \code{ind} are printed out. Here \code{id.n} is the
+number of observations to identify by a label. By default, the number of
+observations with robust distance larger than \code{cutoff} is used. By
+default \code{cutoff <- sqrt(qchisq(0.975, p))}. \code{ind} is the index of robust distance whose
+values are larger than \code{cutoff}.
+%% Input (echo) FALSE, Output (results) TRUE
+<<label=cutoff-id.n-sort.y-ind, echo=FALSE>>=
+cat("cutoff =", result$cutoff, "\n")
+cat("id.n <- length(which(rd>cutoff))\n")
+cat("id.n =", result$id.n, "\n")
+cat("Here y is the robust distance (rd).\n")
+
+Lst = list(x = result$sort.y$x[c(1:5, 607:611)], ix = result$sort.y$ix[c(1:5, 607:611)])
+cat("sort.y = (To save space, only the smallest five and largest five
+elements of sort.y$x and sort.y$ix are shown.)\n"); show(Lst)
+cat("ind =\n"); show(result$ind)
+@
+
+\noindent From the above results we see that the \code{cutoff} is computed
+as \Sexpr{result$cutoff}. There are \code{id.n = \Sexpr{result$id.n}} observations with robust distance
+larger than \code{cutoff}. \code{sort.y} is a list containing the sorted
+values of \code{y} (the robust distance). \code{sort.y\$x} is arranged in
+increasing order. To save space, only the smallest five and largest five
+robust distances with their indices are shown. \code{sort.y\$ix} contains
+the indices. \code{ind} shows the indices of the largest \code{id.n = \Sexpr{result$id.n}}
+observations whose robust distances are larger than \code{cutoff}. The two
+plots in the second row show a index plot and a Chisquare QQ-plot of the
+robust and mahalanobis distances. We also see that the robust distances are
+far larger than the mahalanobis distances and the outliers have large robust
+distances. The left plot in the third row shows a eigenvalues comparison plot.
+We see that the largest four eigenvalues of the robust method are much smaller
+than those of the classical method, and the largest several eigenvalues of the
+classical method decrease very fast. The right plot in the third row shows
+robust and classical 97.5\% tolerance ellipses plot. We see that the robust
+tolerance ellipse is tighter than the classical one.
+
+The accessor functions \code{getCenter()}, \code{getEigenvalues()},
+\code{getFa()}, \code{getLoadings()}, \code{getQuan()},
+\code{getScores()}, and \code{getSdev()} are used to access the
+corresponding slots. For instance
+
+%% Input (echo) TRUE, Output (results) TRUE
+<<label=get_Fa>>=
+##
+## accessor functions
+##
+getEigenvalues(facovRegOgk)
+@
+
+%% Input (echo) FALSE, Output (results) FALSE
+<<label=get_Fa, echo=FALSE, results=hide>>=
+getCenter(facovRegOgk)
+getFa(facovRegOgk)
+getLoadings(facovRegOgk)
+getQuan(facovRegOgk)
+getScores(facovRegOgk)
+getSdev(facovRegOgk)
+@
+
+Run the file ``testsRobustfa.R" in the ``tests" folder for more details.
+They explain why we choose
+\code{x = scale(stock611[,3:12])} as the date input; show other results by
+different robust estimators, e.g., MCD etc..
+
+\section{Conclusions}
+
+As in \cite{Todorov-Filzmoser:09},\ in this paper we presented an
+object-oriented framework for robust factor analysis developed in
+the \proglang{S4} class system of the programming environment \proglang{R}. The main goal
+of the framework is to support the usage, experimentation,
+development and testing of robust factor analysis method as well as
+simplifying comparisons with related methods. It minimizes the
+effort for performing any of the following tasks:
+
+\begin{itemize}
+\item application of the already existing robust factor analysis methods for
+practical data analysis;
+
+\item implementation of new robust factor analysis methods or variants of the
+existing ones;
+
+\item evaluation of existing and new methods by carrying out comparison studies.
+\end{itemize}
+
+A major design goal was the openness to extensions by the development of new
+robust factor analysis methods in the package \pkg{robustfa} or in other
+packages depending on \pkg{robustfa}.
+
+\section*{Acknowledgments}
+
+%% \bibliographystyle{jss}
+%% \bibliographystyle{plainnat}
+\bibliography{mybib}
+
+\end{document}
