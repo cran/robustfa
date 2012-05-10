@@ -12,6 +12,8 @@ function(x, factors=2, covmat=NULL, rotation = c("varimax", "none"), scoresMetho
    else # covmat==NULL and x==NULL
 	stop("no covmat or x provided")
 
+   ## correlation is the correlation matrix!
+   correlation=R
    d=1/diag(solve(R))
 
    p<-nrow(R); diag_R<-diag(R); sum_rank<-sum(diag_R)
@@ -22,6 +24,7 @@ function(x, factors=2, covmat=NULL, rotation = c("varimax", "none"), scoresMetho
 
    kmax=20; k<-1; h <- diag_R-d
    repeat{
+      ## now R is the reduced correlation matrix, not the correlation matrix!
       diag(R)<- h; h1<-h; eig<-eigen(R)
       for (i in 1:factors)
          A0[,i]<-sqrt(eig$values[i])*eig$vectors[,i]
@@ -86,7 +89,7 @@ function(x, factors=2, covmat=NULL, rotation = c("varimax", "none"), scoresMetho
 		loadings=A, 
 		communality=h,
 		uniquenesses=specific,
-		correlation=R,
+		correlation=correlation,
 		factors=factors,
 		method=method,
 		scores=F,
@@ -96,7 +99,7 @@ function(x, factors=2, covmat=NULL, rotation = c("varimax", "none"), scoresMetho
 		scoresMethod=scoresMethod,
 		n.obs=n.obs,
 		center=center,
-		eigenvalues=eig$values)
+		eigenvalues=eigen(correlation)$values)
    class(res)="factorScorePfa"
    res
 }

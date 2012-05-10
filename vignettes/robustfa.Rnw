@@ -274,7 +274,7 @@ style. See \url{http://java.sun.com/docs/codeconv/}.
 
 \begin{figure}[!htbp]
 \centerline{
-\includegraphics[width=3.7in]{FaModel}}\caption{Object model for robust factor
+\includegraphics[width=6.5in]{FaModel}}\caption{Object model for robust factor
 analysis.}%
 \label{fig:FaModel}%
 \end{figure}

@@ -1,0 +1,19 @@
+2012-05-10  Ying-Ying Zhang (Robert) <robertzhang@cqu.edu.cn>
+    * version 1.0-01
+    * in AllClasses.R: 
+        1) add Fa@: communality, scoringCoef, meanF, corF
+    * in FaClassic.R: 
+	1) add res@: communality, scoringCoef, meanF, corF
+	2) change scores to outComputeScores
+    * in FaCov.R: 
+	1) add res@: communality, scoringCoef, meanF, corF
+	2) change scores to outComputeScores
+    * in factorScorePfa.R: 
+        1) change res$correlation
+        2) change res$eigenvalues
+        3) add correlation=R
+    * in utils.R: 
+        1) change the function computeScores() a lot
+    * computeScores.Rd:
+        1) revise \value{}
+        2) revise \examples{}

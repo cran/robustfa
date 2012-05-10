@@ -25,7 +25,7 @@ options(prompt = "R> ", continue = "+ ")
 library("robustfa")
 data("hbk")
 hbk.x <- hbk[,1:3]              # take only the X part
-
+ 
 data("stock611")
 stock608 = stock611[-c(92,2,337),]
 stock604 = stock611[-c(92,2,337,338,379,539,79),]

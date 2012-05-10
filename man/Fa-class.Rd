@@ -16,6 +16,7 @@ Class \code{"Fa"} is a virtual base class for all classical and robust FA classe
     \item{\code{call}:}{Object of class \code{"language"} an unevaluated function call}
     \item{\code{converged}:}{Object of class \code{"Ulogical"} a logical character indicates whether the iterations converged }
     \item{\code{loadings}:}{Object of class \code{"matrix"} the matrix of variable loadings }
+    \item{\code{communality}:}{Object of class \code{"Uvector"} the communality}
     \item{\code{uniquenesses}:}{Object of class \code{"vector"} the uniquenesses computed }
     \item{\code{correlation}:}{Object of class \code{"matrix"} the correlation matrix }
     \item{\code{criteria}:}{Object of class \code{"Unumeric"}. The results of the optimization: the value of the negative log-likelihood and information on the iterations used. }
@@ -24,6 +25,9 @@ Class \code{"Fa"} is a virtual base class for all classical and robust FA classe
     \item{\code{method}:}{Object of class \code{"character"}. The method: one of "mle", "pca", and "pfa".}
     \item{\code{scores}:}{Object of class \code{"Umatrix"}. If requested, a matrix of scores. }
     \item{\code{scoresMethod}:}{Object of class \code{"character"}. The scores method: one of "none", "regression", and "Bartlett". }
+    \item{\code{scoringCoef}:}{Object of class \code{"Umatrix"} the matrix of scoring coefficients}
+    \item{\code{meanF}:}{Object of class \code{"Uvector"} the column means of scores}
+    \item{\code{corF}:}{Object of class \code{"Umatrix"} the correlation matrix of the scores}
     \item{\code{STATISTIC}:}{Object of class \code{"Unumeric"}. The significance-test statistic, if it can be computed. }
     \item{\code{PVAL}:}{Object of class \code{"Unumeric"}. The significance-test P value, if it can be computed. }
     \item{\code{n.obs}:}{Object of class \code{"numeric"}. The number of observations. }

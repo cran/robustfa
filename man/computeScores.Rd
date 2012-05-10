@@ -26,7 +26,17 @@ Type of scores to produce, if any. The default is \code{"none"}, \code{"regressi
 \code{x} must be a list with components: correlation, loadings, and uniquenesses. Otherwise returns an error "x is not a list".
 }
 \value{
-A matrix of factor scores. NULL if \code{scoresMethod = "none"}.
+A list with components:
+
+\item{scoringCoef }{The scoring coefficients.}
+
+\item{F }{The matrix of scores.}
+
+\item{meanF }{The sample mean of the scores.}
+
+\item{corF }{The sample correlation matrix of the scores.}
+
+scoringCoef=F=meanF=corF=NULL if \code{scoresMethod = "none"}.
 }
 
 \references{
@@ -45,7 +55,7 @@ covx <- restimate(obj=CovControlOgk(), x=data) ## note the names: obj, x
 covmat <- list(cov=getCov(covx), center=getCenter(covx), n.obs=covx@n.obs)
 out=factanal(factors=3, covmat=covmat)
 
-scores <- computeScores(out, newdata=scale(data), scoresMethod="regression"); scores
+outComputeScores <- computeScores(out, newdata=scale(data), scoresMethod="regression"); outComputeScores
 
 }
 

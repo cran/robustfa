@@ -114,7 +114,7 @@ FaClassic.default <- function(x, factors=2, method = c("mle", "pca", "pfa"), sco
                   pfa=factorScorePfa(factors=factors, covmat=covmat), # "factorScorePfa" does not have "cor" argument
                   mle=factanal(factors=factors, covmat=covmat)) # "factanal" does not have "cor" argument
 
-    scores   <- computeScores(out, newdata=scale(data, center=covmat$center, scale = F), scoresMethod=scoresMethod) # "computeScores" is defined in "utils.R"
+    outComputeScores <- computeScores(out, newdata=scale(data, center=covmat$center, scale = F), scoresMethod=scoresMethod) # "computeScores" is defined in "utils.R"
 
     ## fix up call to refer to the generic, but leave arg name as `formula'
     cl[[1]] <- as.name("FaClassic")
@@ -122,14 +122,18 @@ FaClassic.default <- function(x, factors=2, method = c("mle", "pca", "pfa"), sco
     res <- new("FaClassic", call=cl,
 			converged=out$converged,
 			loadings=out$loadings[], # class(out$loadings)=="loadings", class(out$loadings[])=="matrix"
+			communality=out$communality,
 			uniquenesses=out$uniquenesses,
 			correlation=out$correlation,
 			criteria=out$criteria,
 			factors=out$factors,
 			dof=out$dof,
 			method=out$method,
-			scores=scores,
+			scores=outComputeScores$F,
 			scoresMethod=scoresMethod,
+			scoringCoef=outComputeScores$scoringCoef,
+			meanF=outComputeScores$meanF,
+			corF=outComputeScores$corF,
 			STATISTIC=out$STATISTIC,
 			PVAL=out$PVAL,
 			n.obs=n,
