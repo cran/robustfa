@@ -1,3 +1,13 @@
+2012-06-16  Ying-Ying Zhang (Robert) <robertzhang@cqu.edu.cn>
+    * version 1.0-02
+    * DESCRIPTION: 
+        1) Depends: methods, robustbase, pcaPP, mvtnorm, rrcov
+        2) Imports: stats4, stats
+        3) Suggests: grid, lattice, cluster, mclust, MASS, ellipse
+    * NAMESPACE:
+        1) importFrom(stats4, plot, summary, show)
+        2) importFrom(rrcov, getCenter, getEigenvalues, getLoadings, getQuan, getScores, getSdev)
+
 2012-05-10  Ying-Ying Zhang (Robert) <robertzhang@cqu.edu.cn>
     * version 1.0-01
     * in AllClasses.R: 

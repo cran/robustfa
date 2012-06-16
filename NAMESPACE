@@ -1,7 +1,8 @@
 exportPattern("^[[:alpha:]]+")
 
-importFrom(stats4, plot, summary)
+importFrom(stats4, plot, summary, show)
 importFrom(stats, screeplot, biplot, predict)
+importFrom(rrcov, getCenter, getEigenvalues, getLoadings, getQuan, getScores, getSdev)
 
 ## export functions including S4 generics
 export( detail,
@@ -29,26 +30,26 @@ S3method(FaCov, default)
 S3method(FaCov, formula)
 
 exportMethods(
-    "getCenter",
-    "getEigenvalues",
-    "getFa",
-    "getLoadings",
-    "getQuan",
-    "getScores",
-    "getSdev",
-    "plot",
-    "predict",
-    "print",
-    "show",
-    "summary" 
+    getCenter,
+    getEigenvalues,
+    getFa,
+    getLoadings,
+    getQuan,
+    getScores,
+    getSdev,
+    plot,
+    predict,
+    print,
+    show,
+    summary 
 )
 
 exportClasses(
-     "Fa",
-     "FaClassic",
-     "FaCov",
-     "FaRobust",
-     "SummaryFa",
-     "Ulogical",
-     "Unumeric"
+     Fa,
+     FaClassic,
+     FaCov,
+     FaRobust,
+     SummaryFa,
+     Ulogical,
+     Unumeric
 )
