@@ -1,3 +1,9 @@
+2012-06-21  Ying-Ying Zhang (Robert) <robertzhang@cqu.edu.cn>
+    * version 1.0-03
+    * DESCRIPTION: 
+        1) Depends: methods, robustbase, pcaPP, mvtnorm, rrcov, R (>= 2.15.0)
+           Because the most recent robustfa 1.0-02 update does not work with            R-oldrelease (i.e. R-2.14.2).
+
 2012-06-16  Ying-Ying Zhang (Robert) <robertzhang@cqu.edu.cn>
     * version 1.0-02
     * DESCRIPTION: 

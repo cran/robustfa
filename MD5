@@ -1,5 +1,5 @@
-5ce28c80a6565a8b8f01052d7718108c *ChangeLog
-bb771394233f334d6145bf16f407addb *DESCRIPTION
+03a6058b94a42fa86170fba3d111180e *ChangeLog
+fffc4714e7fd7bcc8b8ac135c35cd9f6 *DESCRIPTION
 6da4c9528fb5244ae4db04cee70fdd03 *NAMESPACE
 f4c563ab601d4edc66792809bbef5b82 *R/AllClasses.R
 d4239be62143b3729ed4cedd9ff84c8d *R/AllGenerics.R
@@ -14,7 +14,7 @@ aa0fd0538a6e428c8e46d6de20c7b46c *R/robustfa.R
 5131ec324be886935a8346c5aacfa45d *R/utils.R
 0f334bc331462486417b0aa358a7cd4c *data/stock611.rda
 f1b2e0dab2b25f6f5a28abd1a08b5a3e *inst/doc/robustfa.Rnw
-0041a6fdcb8f17455e9e98414eee8630 *inst/doc/robustfa.pdf
+028b17a92fe4bb520ac3aa6cdfab6fe4 *inst/doc/robustfa.pdf
 18904d8bac609f7de5d93d0804fb56a2 *man/Fa-class.Rd
 0d64a5d0a0b689604b979c0e792151cd *man/FaClassic-class.Rd
 2256e0440110c483366e2b456f0b5bd5 *man/FaClassic.Rd
