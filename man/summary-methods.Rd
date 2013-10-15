@@ -34,14 +34,22 @@ Summary an object of class "Fa".
 
 }}
 
+\references{
+Zhang, Y. Y. (2013), An Object Oriented Solution for Robust Factor Analysis.
+}
+
+\author{ Ying-Ying Zhang (Robert) \email{robertzhangyying@qq.com} }
+
 \examples{
-data(stock611)
 
-facovRegOgk=FaCov(x=scale(stock611[,3:12]), factors=3, cov.control = CovControlOgk(), 
-scoresMethod = "regression")
+data("hbk")
+hbk.x = hbk[,1:3] 
 
-## summaryFacovRegOgk is an object of class "SummaryFa"
-summaryFacovRegOgk=summary(facovRegOgk); summaryFacovRegOgk
+faCovPcaRegMcd = FaCov(x = hbk.x, factors = 2, method = "pca",
+scoresMethod = "regression", cov.control = CovControlMcd()); faCovPcaRegMcd
+
+faCovPcaRegMcd
+summary(faCovPcaRegMcd)
 
 }
 

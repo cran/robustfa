@@ -18,7 +18,9 @@ Class \code{"Fa"} is a virtual base class for all classical and robust FA classe
     \item{\code{loadings}:}{Object of class \code{"matrix"} the matrix of variable loadings }
     \item{\code{communality}:}{Object of class \code{"Uvector"} the communality}
     \item{\code{uniquenesses}:}{Object of class \code{"vector"} the uniquenesses computed }
+    \item{\code{covariance}:}{Object of class \code{"matrix"} the covariance matrix }
     \item{\code{correlation}:}{Object of class \code{"matrix"} the correlation matrix }
+    \item{\code{usedMatrix}:}{Object of class \code{"matrix"} the used matrix (running matrix) }
     \item{\code{criteria}:}{Object of class \code{"Unumeric"}. The results of the optimization: the value of the negative log-likelihood and information on the iterations used. }
     \item{\code{factors}:}{Object of class \code{"numeric"} the number of factors }
     \item{\code{dof}:}{Object of class \code{"Unumeric"}. The number of degrees of freedom of the factor analysis model. }
@@ -66,11 +68,11 @@ Lawley, D. N. and Maxwell, A. E. (1971) \emph{Factor Analysis as a Statistical M
 
 Thomson, G. H. (1951) \emph{The Factorial Analysis of Human Ability}. London University Press. 
 
-Zhang, Y. Y. (2012), An Object Oriented Framework for Robust Factor Analysis.
+Zhang, Y. Y. (2013), An Object Oriented Solution for Robust Factor Analysis.
 
 }
 
-\author{ Ying-Ying Zhang (Robert) \email{robertzhang@cqu.edu.cn} }
+\author{ Ying-Ying Zhang (Robert) \email{robertzhangyying@qq.com} }
 
 
 \seealso{

@@ -27,4 +27,4 @@ if(!isGeneric("getScores"))
 
 setGeneric("getFa", function(obj) standardGeneric("getFa")) 
 ## return a factanal() compatible object to use the available standard plots 
-## (i.e. a list with loadings, uniquenesses, correlation, scores, scores.method, sdev)
+## (i.e. a list with loadings, uniquenesses, covariance, correlation, usedMatrix, scores, scoresMethod, sdev)

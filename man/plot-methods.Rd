@@ -40,4 +40,24 @@ generic functions - see \code{plot}
 
 }}
 
+\references{
+Zhang, Y. Y. (2013), An Object Oriented Solution for Robust Factor Analysis.
+}
+
+\author{ Ying-Ying Zhang (Robert) \email{robertzhangyying@qq.com} }
+
+\examples{
+
+data("hbk")
+hbk.x = hbk[,1:3] 
+
+faClassicPcaReg = FaClassic(x = hbk.x, factors = 2, method = "pca",
+scoresMethod = "regression"); faClassicPcaReg
+summary(faClassicPcaReg)
+
+plot(faClassicPcaReg, which = "factorScore", choices = 1:2)
+plot(faClassicPcaReg, which = "screeplot")
+
+}
+
 \keyword{methods}

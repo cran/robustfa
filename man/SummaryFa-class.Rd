@@ -21,11 +21,12 @@ Objects can be created by calls of the form \code{new("SummaryFa", ...)}. But mo
     \item{show}{\code{signature(object = "SummaryFa")}: display the object }
 	 }
 }
+
 \references{
-Zhang, Y. Y. (2012), An Object Oriented Framework for Robust Factor Analysis.
+Zhang, Y. Y. (2013), An Object Oriented Solution for Robust Factor Analysis.
 }
 
-\author{ Ying-Ying Zhang (Robert) \email{robertzhang@cqu.edu.cn} }
+\author{ Ying-Ying Zhang (Robert) \email{robertzhangyying@qq.com} }
 
 \seealso{
 \code{\link{Fa-class}}

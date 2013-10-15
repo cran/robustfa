@@ -30,25 +30,28 @@ A list with \code{m} (the number of factors) components:
 \item{[[m]] }{The ordered factor scores with a decreasing m-th column.}
 
 }
+
 \references{
-Zhang, Y. Y. (2012), An Object Oriented Framework for Robust Factor Analysis.
+Zhang, Y. Y. (2013), An Object Oriented Solution for Robust Factor Analysis.
 }
 
-\author{ Ying-Ying Zhang (Robert) \email{robertzhang@cqu.edu.cn} }
+\author{ Ying-Ying Zhang (Robert) \email{robertzhangyying@qq.com} }
 
 \seealso{
 \code{\link{order}}
 }
 
 \examples{
+
 data(stock611)
 R611=cor(stock611[,3:12]); R611
 
 ## FS.pca contains scores etc.
-fsPca=factorScorePca(x = stock611[,3:12], factors = 2, rotation = "varimax", 
-scoresMethod = "regression"); fsPca
+fsPca=factorScorePca(x = stock611[,3:12], factors = 2, cor = TRUE, 
+rotation = "varimax", scoresMethod = "regression"); fsPca
 
 orderedFS=fsOrder(fsPca$scores); orderedFS
+
 }
 
 \keyword{robust}

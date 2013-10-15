@@ -8,7 +8,8 @@ Factor Analysis by Principal Component Analysis (PCA)
 Perform principal component factor analysis on a covariance matrix or data matrix. 
 }
 \usage{
-factorScorePca(x, factors = 2, covmat = NULL, rotation = c("varimax", "none"), 
+factorScorePca(x, factors = 2, covmat = NULL, cor = FALSE, 
+rotation = c("varimax", "none"), 
 scoresMethod = c("none", "regression", "Bartlett"))
 }
 
@@ -22,6 +23,9 @@ The number of factors to be fitted.
   \item{covmat}{
 A covariance matrix, or a covariance list as returned by \code{\link{cov.wt}}. Of course, correlation matrices are covariance matrices.
 }
+  \item{cor}{
+A logical value indicating whether the calculation should use the covariance matrix (\code{cor = FALSE}) or the correlation matrix (\code{cor = TRUE}).
+}
   \item{rotation}{
 character. "none" or "varimax": it will be called with first argument the loadings matrix, and should return a list with component \code{loadings} giving the rotated loadings, or just the rotated loadings.
 }
@@ -31,13 +35,13 @@ Type of scores to produce, if any. The default is \code{"none"}, \code{"regressi
 }
 
 \details{
-"factorScorePca" always uses the correlation matrix. A covariance matrice will be scaled into the corresponding correlation matrix efficiently by \code{\link{cov2cor}}.
-
 Other feasible usages are:
+
 \code{factorScorePca(factors, covmat)}
+
 \code{factorScorePca(x, factors, rotation, scoresMethod)}
 
-If \code{x} is missing, then the following components of the result will be NULL: scores, ScoringCoef, mean.F, cor.F, n.obs, and center.
+If \code{x} is missing, then the following components of the result will be NULL: scores, ScoringCoef, meanF, corF, and n.obs.
 }
 
 \value{
@@ -51,7 +55,11 @@ An object of class \code{"factorScorePca"} with components:
 
 \item{uniquenesses }{The uniquenesses/specific variance computed.}
 
-\item{correlation }{The correlation matrix used.}
+\item{covariance }{The covariance matrix.}
+
+\item{correlation }{The correlation matrix.}
+
+\item{usedMatrix }{The used matrix (running matrix).}
 
 \item{factors }{The argument factors.}
 
@@ -69,23 +77,24 @@ An object of class \code{"factorScorePca"} with components:
 
 \item{n.obs }{The number of observations if available. NULL if \code{x} is missing.}
 
-\item{center }{The center of the data. NULL if \code{x} is missing.}
+\item{center }{The center of the data. }
 
-\item{eigenvalues }{The eigenvalues of the correlation matrix.}
+\item{eigenvalues }{The eigenvalues of the usedMatrix S.}
 
 }
 
 \references{
-Zhang, Y. Y. (2012), An Object Oriented Framework for Robust Factor Analysis.
+Zhang, Y. Y. (2013), An Object Oriented Solution for Robust Factor Analysis.
 }
 
-\author{ Ying-Ying Zhang (Robert) \email{robertzhang@cqu.edu.cn} }
+\author{ Ying-Ying Zhang (Robert) \email{robertzhangyying@qq.com} }
 
 \seealso{
 \code{\link{factorScorePfa}}, \code{\link{factanal}}
 }
 
 \examples{
+
 data(stock611)
 R611=cor(stock611[,3:12]); R611
 
@@ -98,8 +107,9 @@ covmat <- list(cov=getCov(covx), center=getCenter(covx), n.obs=covx@n.obs)
 fsPca2=factorScorePca(factors = 3, covmat = covmat); fsPca2
 
 ## fsPca3 contains scores etc.
-fsPca3=factorScorePca(x = stock611[,3:12], factors = 2, rotation = "varimax", 
+fsPca3=factorScorePca(x = stock611[,3:12], factors = 2, cor = TRUE, rotation = "varimax", 
 scoresMethod = "regression"); fsPca3
+
 }
 
 \keyword{robust}

@@ -1,11 +1,14 @@
 exportPattern("^[[:alpha:]]+")
 
-importFrom(stats4, plot, summary, show)
+importFrom(methods, show)
+importFrom(stats4, plot, summary)
 importFrom(stats, screeplot, biplot, predict)
 importFrom(rrcov, getCenter, getEigenvalues, getLoadings, getQuan, getScores, getSdev)
 
 ## export functions including S4 generics
-export( detail,
+export( compute_cov_cor,
+	computeScores,
+	detail,
 	FaClassic,
 	FaCov,
 	factorScorePca,
@@ -15,8 +18,7 @@ export( detail,
 	myFaPrint,      
 	myplotDD,        
 	plot,     
-	predict,      
-	computeScores,   
+	predict,        
 	print,     
         show,          
 	summary

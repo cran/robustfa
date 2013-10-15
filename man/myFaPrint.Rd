@@ -28,25 +28,27 @@ An invisible argument \code{object}.
 }
 
 \references{
-Zhang, Y. Y. (2012), An Object Oriented Framework for Robust Factor Analysis.
+Zhang, Y. Y. (2013), An Object Oriented Solution for Robust Factor Analysis.
 }
 
-\author{ Ying-Ying Zhang (Robert) \email{robertzhang@cqu.edu.cn} }
+\author{ Ying-Ying Zhang (Robert) \email{robertzhangyying@qq.com} }
 
 \seealso{\code{\link{Fa-class}}}
 
 \examples{
-data(stock611)
 
-facovRegOgk=FaCov(x=scale(stock611[,3:12]), factors=3, cov.control = CovControlOgk(), 
-scoresMethod = "regression")
+data("hbk")
+hbk.x = hbk[,1:3] 
+
+faCovPcaRegMcd = FaCov(x = hbk.x, factors = 2, method = "pca",
+scoresMethod = "regression", cov.control = CovControlMcd())
 
 ## object=show(object)=print(object)=myFaPrint(object)
-## facovRegOgk is an object of class "Fa"
-facovRegOgk
-show(facovRegOgk)
-print(facovRegOgk)
-myFaPrint(facovRegOgk)
+## faCovPcaRegMcd is an object of class "Fa"
+faCovPcaRegMcd
+show(faCovPcaRegMcd)
+print(faCovPcaRegMcd)
+myFaPrint(faCovPcaRegMcd)
 
 }
 

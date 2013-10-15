@@ -31,11 +31,12 @@ A list with components:
 \item{attributes }{The attributes of \code{x}. Usually \code{result$attributes} is also a list.}
 
 }
+
 \references{
-Zhang, Y. Y. (2012), An Object Oriented Framework for Robust Factor Analysis.
+Zhang, Y. Y. (2013), An Object Oriented Solution for Robust Factor Analysis.
 }
 
-\author{ Ying-Ying Zhang (Robert) \email{robertzhang@cqu.edu.cn} }
+\author{ Ying-Ying Zhang (Robert) \email{robertzhangyying@qq.com} }
 
 \seealso{
 \code{\link{isS4}}, \code{\link{is.object}}, \code{\link{class}}, \code{\link{attributes}}

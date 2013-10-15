@@ -31,23 +31,43 @@ generic functions - see \code{show}, \code{print}, \code{summary}, \code{predict
 
 }}
 
-\examples{
-data(stock611)
+\references{
+Zhang, Y. Y. (2013), An Object Oriented Solution for Robust Factor Analysis.
+}
 
-## facovRegOgk is obtained from FaCov.default
-## facovRegOgk uses the default method = "mle"
-facovRegOgk=FaCov(x=scale(stock611[,3:12]), factors=3, cov.control = CovControlOgk(), 
-scoresMethod = "regression"); facovRegOgk
+\author{ Ying-Ying Zhang (Robert) \email{robertzhangyying@qq.com} }
+
+\examples{
+
+data("hbk")
+hbk.x = hbk[,1:3] 
+
+faCovPcaRegMcd = FaCov(x = hbk.x, factors = 2, method = "pca",
+scoresMethod = "regression", cov.control = CovControlMcd()); faCovPcaRegMcd
 
 ## If missing newdata, the scores are used
-predict(facovRegOgk)
+predict(faCovPcaRegMcd)
 
-## newdata must have the same center and scale attributes as
-## the original data.
-x=scale(stock611[,3:12])
-newdata=stock611[1,3:12] # one row matrix
-newdata=scale(newdata, center=attr(x,"scaled:center"), scale=attr(x,"scaled:scale"))
-prediction=predict(facovRegOgk, newdata=newdata); prediction
+##
+## If not missing newdata, newdata should be scaled first.
+##
+newdata = hbk.x[1, ]
+cor = FALSE # the default
+newdata = { 
+if (cor == TRUE)
+	# standardized transformation
+	scale(newdata, center = faCovPcaRegMcd@center, 
+	scale = sqrt(diag(faCovPcaRegMcd@covariance)))
+else # cor == FALSE
+	# centralized transformation
+	scale(newdata, center = faCovPcaRegMcd@center, scale = FALSE)
+}
+
+##
+## Now, prediction = predict(faCovPcaRegMcd)[1,] = faCovPcaRegMcd@scores[1,]
+##
+prediction = predict(faCovPcaRegMcd, newdata = newdata)
+prediction
 
 }
 

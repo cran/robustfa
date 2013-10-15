@@ -7,13 +7,15 @@
 Robust Factor Analysis
 }
 \description{
-Robust FA are obtained by replacing the classical covariance matrix 
-by a robust covariance estimator. This can be one of the available in \code{rrcov} estimators, i.e., MCD, OGK, M, S, SDE, or MVE estimator.
+Robust factor analysis are obtained by replacing the classical covariance matrix 
+by a robust covariance estimator. This can be one of the available estimators in \code{rrcov}, i.e., MCD, OGK, M, S, SDE, or MVE estimator.
 }
 \usage{
 FaCov(x, \dots)
-\method{FaCov}{formula}(formula, data = NULL, factors = 2, method = "mle", scoresMethod = "none", \dots)
-\method{FaCov}{default}(x, factors = 2, cov.control = CovControlMcd(), method = c("mle", "pca", "pfa"), 
+\method{FaCov}{formula}(formula, data = NULL, factors = 2, cor = FALSE, method = "mle", 
+scoresMethod = "none", \dots)
+\method{FaCov}{default}(x, factors = 2, cor = FALSE, cov.control = CovControlMcd(), 
+method = c("mle", "pca", "pfa"), 
 scoresMethod = c("none", "regression", "Bartlett"), \dots)
 }
 
@@ -28,6 +30,9 @@ scoresMethod = c("none", "regression", "Bartlett"), \dots)
   \item{data}{An optional data frame (or similar: see \code{\link{model.frame}}) containing the variables in the \code{formula}.}
 
   \item{factors}{The number of factors to be fitted.}
+
+  \item{cor}{A logical value indicating whether the calculation should use the covariance matrix (\code{cor = FALSE}) or the correlation matrix (\code{cor = TRUE}).
+}
 
   \item{method}{The method of factor analysis, one of "mle" (the default), "pca", and "pfa".}
 
@@ -46,25 +51,33 @@ An S4 object of class \code{\link{FaCov-class}} which is a subclass of the virtu
 }
 
 \references{
-Zhang, Y. Y. (2012), An Object Oriented Framework for Robust Factor Analysis.
+Zhang, Y. Y. (2013), An Object Oriented Solution for Robust Factor Analysis.
 }
 
-\author{ Ying-Ying Zhang (Robert) \email{robertzhang@cqu.edu.cn} }
+\author{ Ying-Ying Zhang (Robert) \email{robertzhangyying@qq.com} }
 
 \seealso{
 \code{\link{FaClassic-class}}, \code{\link{FaCov-class}}, \code{\link{FaRobust-class}}, \code{\link{Fa-class}}
 }
 
 \examples{
-data(stock611)
 
-## facovRegOgk uses the default method
-facovRegOgk=FaCov(x=scale(stock611[,3:12]), factors=3, cov.control = CovControlOgk(), 
-      scoresMethod = "regression"); facovRegOgk
+data("hbk")
+hbk.x = hbk[,1:3] 
 
-## facovForRegOgkMle uses the formula interface
-facovForRegOgkMle=FaCov(~., data=as.data.frame(scale(stock611[,3:12])), factors=3, 
-cov.control = CovControlOgk(), method = "mle", scoresMethod = "regression"); facovForRegOgkMle
+##
+## faCovPcaRegMcd is obtained from FaCov.default
+##
+faCovPcaRegMcd = FaCov(x = hbk.x, factors = 2, method = "pca",
+scoresMethod = "regression", cov.control = CovControlMcd()); faCovPcaRegMcd
+
+##
+## In fact, it is equivalent to use FaCov.formula
+## faCovForPcaRegMcd = faCovPcaRegMcd
+##
+faCovForPcaRegMcd = FaCov(~., data = as.data.frame(hbk.x), 
+factors = 2, method = "pca", scoresMethod = "regression", 
+cov.control = CovControlMcd()); faCovForPcaRegMcd
 
 }
 

@@ -44,17 +44,19 @@ A distance-distance plot is shown. Return a list with components:
 \item{ind }{The indices of the largest \code{id.n} observations whose robust distances are larger than \code{cutoff}.}
 
 }
+
 \references{
-Zhang, Y. Y. (2012), An Object Oriented Framework for Robust Factor Analysis.
+Zhang, Y. Y. (2013), An Object Oriented Solution for Robust Factor Analysis.
 }
 
-\author{ Ying-Ying Zhang (Robert) \email{robertzhang@cqu.edu.cn} }
+\author{ Ying-Ying Zhang (Robert) \email{robertzhangyying@qq.com} }
 
 \seealso{
 \code{\link{plot}}, \code{\link{qchisq}}, \code{\link{CovClassic}}, \code{\link{getDistance}}
 }
 
 \examples{
+
 data(stock611)
 covMcd=CovRobust(x=scale(stock611[,3:12]), control="mcd"); covMcd
 
