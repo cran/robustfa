@@ -896,7 +896,7 @@ cat("ind =\n"); show(result$ind)
 ### code chunk number 44: faClassic4
 ###################################################
 ## (4) classical, x = scale(stock611[,3:12]), cor = TRUE (correlation matrix)
-faClassic4 = FaClassic(x = scale(stock611[,3:12]), factors = 2, cor = TRUE, 
+faClassic4 = FaClassic(x = scale(stock611[,3:12]), factors = 2, cor = TRUE,
 method = "pca", scoresMethod = "regression"); faClassic4
 summary(faClassic4)
 

@@ -73,9 +73,11 @@ computeScores = function(out, x = data, covmat = covmat, cor = cor, scoresMethod
 	res$scores = F
 	res$meanF = meanF
 	res$corF = corF
-	res$eigenvalues = eigen(S)$values
+	res$eigenvalues = eigen(S)$values # the eigenvalues of the usedMatrix S
 	res$covariance = covariance
+	res$correlation = correlation
 	res$usedMatrix = S
+	res$reducedCorrelation = NULL
 	res
 }
 

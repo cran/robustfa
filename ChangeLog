@@ -1,3 +1,25 @@
+2013-11-09  Ying-Ying Zhang (Robert) <robertzhangyying@qq.com>
+    * version 1.0-5
+    * in util.R: 
+        1) computeScores(): 
+			add res$correlation = correlation
+			add res$reducedCorrelation = NULL
+			change res$eigenvalues = eigen(S)$values
+    * in factorScorePca.R: 
+		1) add res$reducedCorrelation = NULL,
+		2) change res$eigenvalues = eigen(S)$values
+    * in factorScorePfa.R: 
+	    1) res$covariance = covariance
+        2) res$correlation = correlation
+		3) res$reducedCorrelation = reducedCorrelation
+		4) change res$eigenvalues = eigen(S)$values
+	* in AllClasses.R:
+	    1) add slots for Fa: cor, reducedCorrelation
+    * in FaClassic.R and FaCov.R
+	    1) add slot: cor, reducedCorrelation
+    * in Fa.R
+		1) revise method: summary
+	
 2013-10-15  Ying-Ying Zhang (Robert) <robertzhangyying@qq.com>
     * version 1.0-4
     * large revision

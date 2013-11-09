@@ -55,11 +55,13 @@ An object of class \code{"factorScorePca"} with components:
 
 \item{uniquenesses }{The uniquenesses/specific variance computed.}
 
-\item{covariance }{The covariance matrix.}
+\item{covariance }{The robust/classical covariance matrix.}
 
-\item{correlation }{The correlation matrix.}
+\item{correlation }{The robust/classical correlation matrix.}
 
-\item{usedMatrix }{The used matrix (running matrix).}
+\item{usedMatrix }{The used matrix (running matrix). It may be the covariance or correlation matrix according to the value of \code{cor}.}
+
+\item{reducedCorrelation }{NULL. The reduced correlation matrix, reducedCorrelation is calculated in factorScorePfa.R.}
 
 \item{factors }{The argument factors.}
 
@@ -79,7 +81,7 @@ An object of class \code{"factorScorePca"} with components:
 
 \item{center }{The center of the data. }
 
-\item{eigenvalues }{The eigenvalues of the usedMatrix S.}
+\item{eigenvalues }{The eigenvalues of the usedMatrix.}
 
 }
 

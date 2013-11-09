@@ -127,9 +127,11 @@ FaClassic.default <- function(x, factors = 2, cor = FALSE, method = c("mle", "pc
 			loadings = out$loadings[], # class(out$loadings) == "loadings", class(out$loadings[]) == "matrix"
 			communality = out$communality,
 			uniquenesses = out$uniquenesses,
+			cor = cor,
 			covariance = out$covariance,
 			correlation = out$correlation,
 			usedMatrix = out$usedMatrix,
+			reducedCorrelation = out$reducedCorrelation,
 			criteria = out$criteria,
 			factors = out$factors,
 			dof = out$dof,

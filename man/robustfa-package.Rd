@@ -12,8 +12,8 @@ An object oriented solution for robust factor analysis. In the solution, new S4 
 \tabular{ll}{
 Package: \tab robustfa\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2013-10-15\cr
+Version: \tab 1.0-5\cr
+Date: \tab 2013-11-09\cr
 License: \tab GPL (>= 2)\cr
 Depends: \tab methods\cr
 }
@@ -32,5 +32,5 @@ Zhang, Y. Y. (2013), An Object Oriented Solution for Robust Factor Analysis.
 %% \seealso{}
 \examples{
 library("robustfa")
-## see the relevant functions in \code{Details}
+
 }

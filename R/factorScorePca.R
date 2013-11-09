@@ -38,7 +38,7 @@ function(x, factors = 2, covmat = NULL, cor = FALSE, rotation = c("varimax", "no
       A0[,i]<-sqrt(eig$values[i])*eig$vectors[,i]
 
    if (missing(rotation) || rotation == "varimax")
-        A = varimax(A0, normalize = T)$loadings
+        A = varimax(A0, normalize = TRUE)$loadings
    else if (rotation == "none")
         A = A0
    else cat("undefined rotation method, try rotation = 'varimax' or 'none' \n")
@@ -100,9 +100,10 @@ function(x, factors = 2, covmat = NULL, cor = FALSE, rotation = c("varimax", "no
 		loadings = A, 
 		communality = h,
 		uniquenesses = specific,
-		covariance = covariance,
-		correlation = correlation,
-		usedMatrix = S,
+		covariance = covariance, # robust/classical covariance matrix
+		correlation = correlation, # robust/classical correlation matrix
+		usedMatrix = S, # covariance or correlation matrix according to the value of cor
+		reducedCorrelation = NULL,
 		factors = factors,
 		method = method,
 		scores = F,
@@ -112,7 +113,7 @@ function(x, factors = 2, covmat = NULL, cor = FALSE, rotation = c("varimax", "no
 		scoresMethod = scoresMethod,
 		n.obs = n.obs,
 		center = center,
-		eigenvalues = eig$values) # the eigenvalues of the usedMatrix S
+		eigenvalues = eigen(S)$values) # the eigenvalues of the usedMatrix S
    class(res) = "factorScorePca"
    res
 }

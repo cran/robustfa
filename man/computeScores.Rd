@@ -37,7 +37,7 @@ The output is a list. Except for the components of \code{out}, it also has compo
 
 \item{scoringCoef }{The scoring coefficients.}
 
-\item{F }{The matrix of scores.}
+\item{scores }{The matrix of scores.}
 
 \item{meanF }{The sample mean of the scores.}
 
@@ -47,7 +47,11 @@ The output is a list. Except for the components of \code{out}, it also has compo
 
 \item{covariance }{The covariance matrix.}
 
+\item{correlation }{The correlation matrix.}
+
 \item{usedMatrix }{The used matrix (running matrix) to compute \code{scoringCoef} etc..}
+
+\item{reducedCorrelation }{NULL. The reduced correlation matrix, reducedCorrelation is calculated in factorScorePfa.R.}
 
 scoringCoef = F = meanF = corF = NULL if \code{scoresMethod = "none"}.
 }

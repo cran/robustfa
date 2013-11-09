@@ -112,7 +112,7 @@ important to consider robust alternatives to these estimators. There are
 several robust estimators in the literature: MCD \citep{Rousseeuw:85,
 Rousseeuw-VanDriessen:99}, OGK \citep{Maronna-Zamar:02}, MVE
 \citep{Rousseeuw:85}, M \citep{Rocke:96}, S \citep{Davies:87, Ruppert:92,
-Woodruff-Rocke:94, Rocke:96, SalibianBarrera-Yohai:06} and Stahel-Donoho
+Woodruff-Rocke:94, Rocke:96, He-Wang:97, SalibianBarrera-Yohai:06} and Stahel-Donoho
 \citep{Stahel:81a, Stahel:81b, Donoho:82, Maronna-Yohai:95}. Substituting the
 classical location and scatter estimates by their robust analogues is the most
 straightforward method for robustifying many multivariate procedures
@@ -2560,7 +2560,7 @@ object \code{faClassic4} of class \code{FaClassic}.
 %% Input (echo) TRUE, Output (results) TRUE
 <<label=faClassic4>>=
 ## (4) classical, x = scale(stock611[,3:12]), cor = TRUE (correlation matrix)
-faClassic4 = FaClassic(x = scale(stock611[,3:12]), factors = 2, cor = TRUE, 
+faClassic4 = FaClassic(x = scale(stock611[,3:12]), factors = 2, cor = TRUE,
 method = "pca", scoresMethod = "regression"); faClassic4
 summary(faClassic4)
 @
