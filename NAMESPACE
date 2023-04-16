@@ -1,12 +1,18 @@
-exportPattern("^[[:alpha:]]+")
+importFrom("graphics", "abline", "par", "text", "title")
+importFrom("methods", "new")
+importFrom("stats", "cov", "cov2cor", "factanal", "model.matrix",
+           "qchisq", "terms", "varimax")
+importFrom("utils", "data")
 
 importFrom(methods, show)
 importFrom(stats4, plot, summary)
 importFrom(stats, screeplot, biplot, predict)
 importFrom(rrcov, getCenter, getEigenvalues, getLoadings, getQuan, getScores, getSdev)
 
+exportPattern("^[[:alpha:]]+")
+
 ## export functions including S4 generics
-export( compute_cov_cor,
+export(compute_cov_cor,
 	computeScores,
 	detail,
 	FaClassic,
@@ -20,7 +26,7 @@ export( compute_cov_cor,
 	plot,     
 	predict,        
 	print,     
-        show,          
+  show,          
 	summary
 )
 
@@ -42,7 +48,6 @@ exportMethods(
     plot,
     predict,
     print,
-    show,
     summary 
 )
 

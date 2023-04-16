@@ -35,7 +35,7 @@ FaClassic.formula <- function (formula, data = NULL, factors = 2, cor = FALSE, m
     ## this is not a `standard' model-fitting function,
     ## so no need to consider contrasts or levels
     
-	## if (rrcov:::.check_vars_numeric(mf)) # Unexported object imported by a ¡®:::¡¯ call
+	## if (rrcov:::.check_vars_numeric(mf)) # Unexported object imported by a ??:::?? call
     ##     stop("Fa applies only to numerical variables")
 
     na.act <- attr(mf, "na.action")
@@ -107,9 +107,9 @@ FaClassic.default <- function(x, factors = 2, cor = FALSE, method = c("mle", "pc
 #     dimnames(scores)[[2]] <- paste("PC", seq_len(ncol(scores)), sep = "")
 #     dimnames(loadings) <- list(colnames(data), paste("PC", seq_len(ncol(loadings)), sep = ""))
 
-    ## use Cov (or CovClassic) to calculate the covariance matrix
-    covx <- Cov(data)
-    covmat <- list(cov = getCov(covx), center = getCenter(covx), n.obs = covx@n.obs)
+    ## use rrcov::Cov (or rrcov::CovClassic) to calculate the covariance matrix
+    covx <- rrcov::Cov(data)
+    covmat <- list(cov = rrcov::getCov(covx), center = rrcov::getCenter(covx), n.obs = covx@n.obs)
 
     out <- switch(method, 
                   pca = factorScorePca(x = data, factors = factors, covmat = covmat, cor = cor, scoresMethod = scoresMethod),
@@ -144,7 +144,7 @@ FaClassic.default <- function(x, factors = 2, cor = FALSE, method = c("mle", "pc
 			STATISTIC = out$STATISTIC,
 			PVAL = out$PVAL,
 			n.obs = n,
-			center = getCenter(covx),
+			center = rrcov::getCenter(covx),
 			eigenvalues = out$eigenvalues,
 			cov.control = NULL)
 

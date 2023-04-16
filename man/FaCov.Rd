@@ -14,7 +14,7 @@ by a robust covariance estimator. This can be one of the available estimators in
 FaCov(x, \dots)
 \method{FaCov}{formula}(formula, data = NULL, factors = 2, cor = FALSE, method = "mle", 
 scoresMethod = "none", \dots)
-\method{FaCov}{default}(x, factors = 2, cor = FALSE, cov.control = CovControlMcd(), 
+\method{FaCov}{default}(x, factors = 2, cor = FALSE, cov.control = rrcov::CovControlMcd(), 
 method = c("mle", "pca", "pfa"), 
 scoresMethod = c("none", "regression", "Bartlett"), \dots)
 }
@@ -69,7 +69,7 @@ hbk.x = hbk[,1:3]
 ## faCovPcaRegMcd is obtained from FaCov.default
 ##
 faCovPcaRegMcd = FaCov(x = hbk.x, factors = 2, method = "pca",
-scoresMethod = "regression", cov.control = CovControlMcd()); faCovPcaRegMcd
+scoresMethod = "regression", cov.control = rrcov::CovControlMcd()); faCovPcaRegMcd
 
 ##
 ## In fact, it is equivalent to use FaCov.formula
@@ -77,7 +77,7 @@ scoresMethod = "regression", cov.control = CovControlMcd()); faCovPcaRegMcd
 ##
 faCovForPcaRegMcd = FaCov(~., data = as.data.frame(hbk.x), 
 factors = 2, method = "pca", scoresMethod = "regression", 
-cov.control = CovControlMcd()); faCovForPcaRegMcd
+cov.control = rrcov::CovControlMcd()); faCovForPcaRegMcd
 
 }
 

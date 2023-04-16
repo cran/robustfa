@@ -1,6 +1,5 @@
 ## show, print, summary, predict, plot were defined in packages.
 ## However, they are not S4 generic functions. After setGeneric, they are S4 generic functions.
-## setGeneric("show") # standardGeneric for "show" defined from package "methods"
 setGeneric("print") # standardGeneric for "print" defined from package "base"
 setGeneric("summary") # standardGeneric for "summary" defined from package "base"
 setGeneric("predict") # standardGeneric for "predict" defined from package "stats"

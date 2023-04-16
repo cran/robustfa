@@ -83,16 +83,16 @@ computeScores = function(out, x = data, covmat = covmat, cor = cor, scoresMethod
 
 compute_cov_cor = function(x, control){
 
-cov_x = CovRobust(x = x, control = control)
-cov_scale_x = CovRobust(x = scale(x), control = control)
+cov_x = rrcov::CovRobust(x = x, control = control)
+cov_scale_x = rrcov::CovRobust(x = scale(x), control = control)
 
 ## S_r != S_r_tilda? Yes!
 ## R_r == R_r_tilda? Yes!
 res = list(
-		S_r = getCov(cov_x),
-		S_r_tilda = getCov(cov_scale_x),
-		R_r = getCorr(cov_x),
-		R_r_tilda = getCorr(cov_scale_x))
+		S_r = rrcov::getCov(cov_x),
+		S_r_tilda = rrcov::getCov(cov_scale_x),
+		R_r = rrcov::getCorr(cov_x),
+		R_r_tilda = rrcov::getCorr(cov_scale_x))
 res
 }
 

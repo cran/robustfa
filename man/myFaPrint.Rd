@@ -41,12 +41,12 @@ data("hbk")
 hbk.x = hbk[,1:3] 
 
 faCovPcaRegMcd = FaCov(x = hbk.x, factors = 2, method = "pca",
-scoresMethod = "regression", cov.control = CovControlMcd())
+scoresMethod = "regression", cov.control = rrcov::CovControlMcd())
 
-## object=show(object)=print(object)=myFaPrint(object)
-## faCovPcaRegMcd is an object of class "Fa"
+## you can use either object or print(object) or myFaPrint(object)
+## since faCovPcaRegMcd is an object of class "Fa"
+
 faCovPcaRegMcd
-show(faCovPcaRegMcd)
 print(faCovPcaRegMcd)
 myFaPrint(faCovPcaRegMcd)
 

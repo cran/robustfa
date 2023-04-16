@@ -34,8 +34,8 @@ A list with the following components:
 
 \item{R_r_tilda }{The robust correlation matrix of cov_scale_x.}
 
-cov_x = CovRobust(x = x, control = control)
-cov_scale_x = CovRobust(x = scale(x), control = control)
+cov_x = rrcov::CovRobust(x = x, control = control)
+cov_scale_x = rrcov::CovRobust(x = scale(x), control = control)
 
 }
 

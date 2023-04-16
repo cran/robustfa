@@ -26,7 +26,7 @@ predict(object, ...)
 \describe{
 
 \item{\code{signature(object = "Fa")}}{
-generic functions - see \code{show}, \code{print}, \code{summary}, \code{predict}, \code{plot}, \code{getCenter}, \code{getEigenvalues}, \code{getFa}, \code{getLoadings}, \code{getQuan}, \code{getScores}, \code{getSdev}
+generic functions - see \code{print}, \code{summary}, \code{predict}, \code{plot}, \code{getCenter}, \code{getEigenvalues}, \code{getFa}, \code{getLoadings}, \code{getQuan}, \code{getScores}, \code{getSdev}
 }
 
 }}
@@ -43,7 +43,7 @@ data("hbk")
 hbk.x = hbk[,1:3] 
 
 faCovPcaRegMcd = FaCov(x = hbk.x, factors = 2, method = "pca",
-scoresMethod = "regression", cov.control = CovControlMcd()); faCovPcaRegMcd
+scoresMethod = "regression", cov.control = rrcov::CovControlMcd()); faCovPcaRegMcd
 
 ## If missing newdata, the scores are used
 predict(faCovPcaRegMcd)

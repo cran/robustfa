@@ -104,8 +104,8 @@ R611 = cor(stock611[,3:12]); R611
 fsPfa1 = factorScorePfa(factors = 3, covmat = R611); fsPfa1
 
 ## covmat is a list
-covx = Cov(stock611[,3:12])
-covmat = list(cov = getCov(covx), center = getCenter(covx), n.obs = covx@n.obs)
+covx = rrcov::Cov(stock611[,3:12])
+covmat = list(cov = rrcov::getCov(covx), center = rrcov::getCenter(covx), n.obs = covx@n.obs)
 fsPfa2 = factorScorePfa(factors = 3, cor = TRUE, covmat = covmat); fsPfa2
 
 ## fsPfa3 contains scores etc.

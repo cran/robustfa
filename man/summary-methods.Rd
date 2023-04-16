@@ -46,7 +46,7 @@ data("hbk")
 hbk.x = hbk[,1:3] 
 
 faCovPcaRegMcd = FaCov(x = hbk.x, factors = 2, method = "pca",
-scoresMethod = "regression", cov.control = CovControlMcd()); faCovPcaRegMcd
+scoresMethod = "regression", cov.control = rrcov::CovControlMcd()); faCovPcaRegMcd
 
 faCovPcaRegMcd
 summary(faCovPcaRegMcd)

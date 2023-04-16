@@ -30,7 +30,7 @@ FaCov.formula <- function (formula, data = NULL, factors = 2, cor = FALSE, metho
     ## this is not a 'standard' model-fitting function,
     ## so no need to consider contrasts or levels
 
-	## if (rrcov:::.check_vars_numeric(mf)) # Unexported object imported by a ¡®:::¡¯ call
+	## if (rrcov:::.check_vars_numeric(mf)) # Unexported object imported by a ??:::?? call
     ##     stop("Fa applies only to numerical variables")
 
     na.act <- attr(mf, "na.action")
@@ -46,7 +46,7 @@ FaCov.formula <- function (formula, data = NULL, factors = 2, cor = FALSE, metho
     res
 }
 
-FaCov.default <- function(x, factors = 2, cor = FALSE, cov.control = CovControlMcd(), method = c("mle", "pca", "pfa"), scoresMethod = c("none", "regression", "Bartlett"), ...) 
+FaCov.default <- function(x, factors = 2, cor = FALSE, cov.control = rrcov::CovControlMcd(), method = c("mle", "pca", "pfa"), scoresMethod = c("none", "regression", "Bartlett"), ...) 
 # na.action = na.fail, trace = FALSE
 {
 
@@ -86,8 +86,8 @@ FaCov.default <- function(x, factors = 2, cor = FALSE, cov.control = CovControlM
 ######################################################################
 
     ## add the option for classic covariance estimates - if cov.control = NULL
-    covx <- if(!is.null(cov.control)) restimate(cov.control, data) else Cov(data)
-    covmat <- list(cov = getCov(covx), center = getCenter(covx), n.obs = covx@n.obs)
+    covx <- if(!is.null(cov.control)) rrcov::restimate(cov.control, data) else rrcov::Cov(data)
+    covmat <- list(cov = rrcov::getCov(covx), center = rrcov::getCenter(covx), n.obs = covx@n.obs)
 
     out <- switch(method, 
                   pca = factorScorePca(x = data, factors = factors, covmat = covmat, cor = cor, scoresMethod = scoresMethod), 
@@ -98,7 +98,7 @@ FaCov.default <- function(x, factors = 2, cor = FALSE, cov.control = CovControlM
 	out <- computeScores(out, x = data, covmat = covmat, cor = cor, scoresMethod = scoresMethod) # "computeScores" is defined in "utils.R"
 
     # scores   <- predict(out, newdata = data)
-    # center   <- getCenter(covx)
+    # center   <- rrcov::getCenter(covx)
     # sdev     <- out$sdev
     # scores   <- scores[, 1:k, drop = FALSE]
     # loadings <- out$loadings # [, 1:k, drop = FALSE]
@@ -137,7 +137,7 @@ FaCov.default <- function(x, factors = 2, cor = FALSE, cov.control = CovControlM
 			STATISTIC = out$STATISTIC,
 			PVAL = out$PVAL,
 			n.obs = n,
-			center = getCenter(covx),
+			center = rrcov::getCenter(covx),
 			eigenvalues = out$eigenvalues,
 			cov.control = cov.control)
 

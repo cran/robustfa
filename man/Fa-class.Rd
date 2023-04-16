@@ -52,8 +52,7 @@ Class \code{"Fa"} is a virtual base class for all classical and robust FA classe
     \item{getSdev}{\code{signature(obj = "Fa")}: returns the standard deviations of the factor analysis, i.e., the square roots of the eigenvalues of the covariance/correlation matrix }
     \item{plot}{\code{signature(x = "Fa", y = "missing")}: produces a scatterplot of the factor scores (if which = "factorScore") or shows the eigenvalues plot (if which = "screeplot") }    
     \item{predict}{\code{signature(object = "Fa")}: calculates prediction using the results in object. The newdata argument is an optional data frame or matrix in which to look for variables with which to predict. If newdata is omitted, the scores are used. }
-    \item{print}{\code{signature(x = "Fa")}: prints the results. obj = print(obj) = show(obj) }
-    \item{show}{\code{signature(object = "Fa")}: prints the results. obj = print(obj) = show(obj) }
+    \item{print}{\code{signature(x = "Fa")}: prints the results. obj = print(obj)}
     \item{summary}{\code{signature(object = "Fa")}: produce result summaries of an object of class "Fa". }
 	 }
 }
@@ -72,6 +71,7 @@ Thomson, G. H. (1951) \emph{The Factorial Analysis of Human Ability}. London Uni
 
 Zhang, Y. Y. (2013), An Object Oriented Solution for Robust Factor Analysis.
 
+Zhang, Y. Y. (2014), Robust Factor Analysis and Its Applications in the CSI 100 Index, \emph{Open Journal of Social Sciences} 2(07):12-18, \doi{10.4236/jss.2014.27003}.
 }
 
 \author{ Ying-Ying Zhang (Robert) \email{robertzhangyying@qq.com} }

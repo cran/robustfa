@@ -2,12 +2,13 @@
 \docType{methods}
 \alias{print-methods}
 \alias{print,Fa-method}
+\alias{print,SummaryFa-method}
 \alias{print}
 
-\title{Show/Print/Display an Object}
+\title{Print/Display an Object}
 
 \description{
-Show/print/display an object, including the Call, Standard deviations, Loadings.
+Print/display an object, including the Call, Standard deviations, Loadings.
 }
 
 \usage{
@@ -17,7 +18,7 @@ print(x, ...)
 \arguments{
 
     \item{x}{
-an object of class \code{"Fa"} or of a class derived from \code{"Fa"}. 
+an object of class \code{"Fa"} or \code{"SummaryFa"} or of a class derived from \code{"Fa"} or of class or \code{"SummaryFa"}. 
 }
 
     \item{...}{
@@ -30,9 +31,12 @@ additional arguments, e.g., print.x=TRUE
 \describe{
 
 \item{x = "Fa"}{
-generic functions - see \code{show}, \code{print}, \code{summary}, \code{predict}, \code{plot}, \code{getCenter}, \code{getEigenvalues}, \code{getFa}, \code{getLoadings}, \code{getQuan}, \code{getScores}, \code{getSdev}
+generic functions - see \code{print}, \code{summary}, \code{predict}, \code{plot}, \code{getCenter}, \code{getEigenvalues}, \code{getFa}, \code{getLoadings}, \code{getQuan}, \code{getScores}, \code{getSdev}
 }
 
+\item{x = "SummaryFa"}{
+generic functions - see \code{print}, \code{summary}, \code{predict}, \code{plot}, \code{getCenter}, \code{getEigenvalues}, \code{getFa}, \code{getLoadings}, \code{getQuan}, \code{getScores}, \code{getSdev}
+}
 }}
 
 \value{
@@ -53,12 +57,12 @@ data("hbk")
 hbk.x = hbk[,1:3] 
 
 faCovPcaRegMcd = FaCov(x = hbk.x, factors = 2, method = "pca",
-scoresMethod = "regression", cov.control = CovControlMcd())
+scoresMethod = "regression", cov.control = rrcov::CovControlMcd())
 
-## object=show(object)=print(object)=myFaPrint(object)
-## faCovPcaRegMcd is an object of class "Fa"
+## you can use either object or print(object) or myFaPrint(object)
+## since faCovPcaRegMcd is an object of class "Fa"
+
 faCovPcaRegMcd
-show(faCovPcaRegMcd)
 print(faCovPcaRegMcd)
 myFaPrint(faCovPcaRegMcd)
 

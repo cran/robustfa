@@ -46,7 +46,7 @@ Zhang, Y. Y. (2013), An Object Oriented Solution for Robust Factor Analysis.
 data(stock611)
 detail(stock611)
 
-facovRegOgk=FaCov(x=scale(stock611[,3:12]), factors=3, cov.control = CovControlOgk(), 
+facovRegOgk=FaCov(x=scale(stock611[,3:12]), factors=3, cov.control = rrcov::CovControlOgk(), 
 scoresMethod = "regression"); facovRegOgk
 detail(facovRegOgk)
 

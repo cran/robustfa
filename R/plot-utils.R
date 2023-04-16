@@ -16,7 +16,7 @@ myplotDD <- function(x, cutoff, id.n) {
     ##  to draw a horisontal and a vertical line. Draw also a dotted line
     ##  with a slope 1.
 
-    data <- getData(x)
+    data <- rrcov::getData(x)
     ##  parameters and preconditions
     if(is.vector(data) || is.matrix(data)) {
         if(!is.numeric(data))
@@ -29,10 +29,10 @@ myplotDD <- function(x, cutoff, id.n) {
     n <- dim(data)[1]
     p <- dim(data)[2]
 
-    if(length(getCenter(x))  == 0 ||  length(getCov(x)) == 0)
+    if(length(rrcov::getCenter(x))  == 0 ||  length(rrcov::getCov(x)) == 0)
         stop( "Invalid object: attributes center and cov missing!")
 
-    if(length(getCenter(x))  != p)
+    if(length(rrcov::getCenter(x))  != p)
         stop( "Data set and provided center have different dimensions!")
 
     if(missing(cutoff))
@@ -45,10 +45,10 @@ myplotDD <- function(x, cutoff, id.n) {
             stop(sQuote("id.n")," must be in {1,..,",n,"}")
     }
 
-    ccov <- CovClassic(data)
+    ccov <- rrcov::CovClassic(data)
     md <- rd <- NULL
-    md <- sqrt(getDistance(ccov))
-    rd <- sqrt(getDistance(x))
+    md <- sqrt(rrcov::getDistance(ccov))
+    rd <- sqrt(rrcov::getDistance(x))
 
 # .myddplot(md, rd, cutoff=cutoff, id.n=id.n) # distance-distance plot
     n <- length(md)

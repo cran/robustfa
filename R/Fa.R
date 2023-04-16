@@ -18,27 +18,25 @@ setMethod("getFa", "Fa", function(obj) {
 })
 
 ##
-## Follow the standard methods: show, print, plot
+## Follow the standard methods: print, plot
 ##
-## ?show, we see show(object)
-## For "show", the signature is object = "Fa", so we should use object as argument.
-## Methods may be defined for arguments: object
-## Use  showMethods("show")  for currently available ones.
-setMethod("show", "Fa", function(object) myFaPrint(object))
+
+## ?print, we see print(x)
+## For "print", the signature is x = "Fa", so we should use x as argument.
+## Use  showMethods("print")  for currently available ones.
+setMethod("print", "Fa", function(x, ...) myFaPrint(x, ...))
 
 myFaPrint = function(object, print.x = FALSE) {
 	cl = object@call
     if(!is.null(cl)) {
-        cat("Call:\n")
-        dput(cl)
-        cat("\n")
+        print(paste("Call:\n", deparse(cl), "\n"))
     }
 
-    cat("Standard deviations:\n"); print(getSdev(object))
-    cat("\nLoadings:\n");          print(getLoadings(object))
+	print(paste("Standard deviations:\n",getSdev(object)));
+	print(paste("Loadings:\n",getLoadings(object))); 
 
     if (print.x) {
-        cat("\nRotated variables:\n"); print(getScores(object))
+        print(paste("Rotated variables:\n", getScores(object)))
     }
     invisible(object)
 }
@@ -64,24 +62,15 @@ setMethod("summary", "Fa", function(object){
     new("SummaryFa", faobj = object, importance = round(B,3))
 })
 
-## ?show, we see show(object)
-## For "show", the signature is object = "SummaryFa", so we should use object as argument.
-setMethod("show", "SummaryFa", function(object){
-
-    cat("\nCall:\n")
-    print(object@faobj@call)
-
+## ?print, we see print(object)
+## For "print", the signature is object = "SummaryFa", so we should use object as argument.
+setMethod("print", "SummaryFa", function(x, ...){
+    print(paste("\nCall:\n", deparse(x@faobj@call)))
     digits = max(3, getOption("digits") - 3)
-
-    cat("Importance of components:\n")
-    print(object@importance, digits = digits)
-    invisible(object)
+    print(paste("Importance of components:\n", x@importance, digits = digits))
+    invisible(x)
 })
 
-## ?print, we see print(x)
-## For "print", the signature is x = "Fa", so we should use x as argument.
-## Use  showMethods("print")  for currently available ones.
-setMethod("print", "Fa", function(x, ...) myFaPrint(x, ...))
 
 ## ?predict, we see predict(object)
 ## For "predict", the signature is object = "Fa", so we should use object as argument.

@@ -73,10 +73,10 @@ factors = 2
 cor = TRUE
 scoresMethod = "regression" 
 
-covx = Cov(data)
-covmat = list(cov = getCov(covx), center = getCenter(covx), n.obs = covx@n.obs)
+covx = rrcov::Cov(data)
+covmat = list(cov = rrcov::getCov(covx), center = rrcov::getCenter(covx), n.obs = covx@n.obs)
 
-out = factanal(factors = factors, covmat = covmat)
+out = stats::factanal(factors = factors, covmat = covmat)
 
 out = computeScores(out, x = data, covmat = covmat, cor = cor, scoresMethod = scoresMethod)
 out
